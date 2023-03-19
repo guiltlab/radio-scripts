@@ -6,11 +6,14 @@
 :: - Set up the presets beforehand (with the File Operations full dialog box)
 :: - Replace xxx in /run_main:"View/Switch to playlist/xxx" with the playlist name
 :: - Replace yyy in /runcmd-playlist="File Operations/Link to/yyy" with the preset name
+:: - Replace zzz in set "folder=zzz" with the correct folder name
 
 :: The script switches to a playlist, selects all elements, then runs the Link (hardlink) operation on them following a given preset
+:: Then it compares the number of items in the playlist to the number of music files (flac, aac, mp3, ogg, ac3) found in the destination folder
 :: On the first iteration, it will ALT-Tab to foobar2000 and then press Enter, this allows to bypass the confirmation
 :: dialog by pressing on "Run" automatically. For every other playlist, it will only press Enter (no Alt Tab).
-:: There is a 20 sec delay between each playlist, increase it if necessary (for longer operations such as Move/Copy)
+:: There is a 10 sec delay between each playlist, increase it if necessary (for longer operations such as Move/Copy)
+:: You can launch this script from foobar itself, by creating a Run Service with the path to the script
 
 @echo off
 
