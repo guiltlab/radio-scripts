@@ -16,3 +16,7 @@ find . -name "*.flac" -exec metaflac --show-tag=title {} \; \
   | sed '1s/^/%title% HAS /; 2,$s/^/OR %title% HAS /' \
   | paste -sd ' ' \
   > ../reports/dupes-title.txt
+
+
+find . -name "*.flac" -exec metaflac --show-tag=title {} \; | sort | sed 's/.*title=//I' >> mnt/r/Radio/reports/dupes.txt
+mnt/r/Radio/reports/dupes.txt uniq --ignore-case -d -c > mnt/r/Radio/reports/dupes_processed.txt
