@@ -16,6 +16,7 @@
 
 set "foobar=C:\Program Files (x86)\foobar2000\foobar2000.exe"
 set "log=R:\Radio\reports\count-comparison.txt"
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('%%{TAB}');"
 
 :: Section New music playlists
 
@@ -26,15 +27,15 @@ ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 REM Wait for all tracks to be selected before collecting
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 REM Wait a moment for the clipboard to be populated
 ping -n 2 127.0.0.1 >nul
 rem Count lines in clipboard and empty it
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/best new music"
 ping -n 2 127.0.0.1 >nul
-powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('%%{TAB}'); Start-Sleep -Milliseconds 1000; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
 ping -n 10 127.0.0.1 >nul
 rem Count total number of files in each folder and compare with num_items
 set "folder=R:\Radio\new\best new music"
@@ -52,10 +53,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/2023 tracks"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -75,10 +76,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/2022 tracks"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -98,10 +99,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/2021 tracks"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -123,10 +124,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/best of 1960s"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -148,10 +149,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/blues"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -171,10 +172,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/blues (desert)"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -196,10 +197,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/country & bluegrass"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -221,10 +222,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/funky"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -244,10 +245,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/funk (electro/future)"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -267,10 +268,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/afrobeat"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -290,10 +291,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/disco"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -313,10 +314,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/cumbia/salsa/etc"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -336,10 +337,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/modern funk"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -361,10 +362,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/FR"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -384,10 +385,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/greek"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -407,10 +408,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/IT"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -430,10 +431,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/turkish"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -453,10 +454,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/JP"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -476,10 +477,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/AFRICA"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -499,10 +500,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/AFRICA west"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -522,10 +523,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/AFRICA central"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -545,10 +546,10 @@ ping -n 2 127.0.0.1 >nul
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
-powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="File Operations/Link to/ZA"
 ping -n 2 127.0.0.1 >nul
 powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
@@ -577,6 +578,7 @@ set "foobar=C:\Program Files (x86)\foobar2000\foobar2000.exe"
 ping -n 1 127.0.0.1 >nul
 "%foobar%" /run_main:"Edit/Select all"
 ping -n 1 127.0.0.1 >nul
+powershell.exe -Command "Set-Clipboard -Value $null"
 "%foobar%" /runcmd-playlist="Utilities/Text Tools/Copy: Title"
 @echo off
 
