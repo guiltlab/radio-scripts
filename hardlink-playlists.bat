@@ -506,6 +506,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/VGM"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\soundtracks\vgm\all"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -523,6 +526,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/kino"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\soundtracks\kino"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -540,6 +546,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/TV series"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\soundtracks\telly"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -559,6 +568,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/hip hop ALL"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\hip hop\all"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -576,6 +588,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/hip hop old school"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\hip hop\old school"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -593,6 +608,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/hip hop (real)"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\hip hop\real hip hop"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -610,6 +628,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/hip hop (gangsta)"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\hip hop\gangsta"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -627,6 +648,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/Rap FR"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\hip hop\fr\rap"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -644,6 +668,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/beats"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\hip hop\beats"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -661,6 +688,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/FR hip hop/beats"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\hip hop\fr\all"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -680,6 +710,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/synthpop/electropop"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\pop\electro & synth"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -699,6 +732,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/vocal soul r&b"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\soul\vocal"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -718,6 +754,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/jazz"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\jazz\all"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -735,6 +774,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/jazz (classic & greats)"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\jazz\classic\greats"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -752,6 +794,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/latin jazz/bossa"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\jazz\latin"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -769,6 +814,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/jazz manouche"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\jazz\manouche"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -786,6 +834,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/jazz ethio"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\jazz\fusion\ethio"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -803,6 +854,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/jazz fusion"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\jazz\fusion\all"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -822,6 +876,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/hard rock/metal"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\rock\metal\metal & hard rock"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -839,6 +896,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/stoner/space rock"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\rock\stoner"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -856,6 +916,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/pop rock"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\rock\pop"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -873,6 +936,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/boomer rock"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\rock\classic"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -892,6 +958,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/folk"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\folk\all"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -909,6 +978,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/folk (english)"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\folk\english"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -928,6 +1000,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/reggae & dub"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\reggae\all"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -947,6 +1022,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/electro"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\electro\all"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -964,6 +1042,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/drum & bass"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\electro\dnb"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -981,6 +1062,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/jungle"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\electro\jungle"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -998,6 +1082,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/dubstep"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\electro\dubstep"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -1015,6 +1102,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/electroswing"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\electro\electroswing"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -1032,6 +1122,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/IDM/techno/hard dance"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\electro\idm"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -1049,6 +1142,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/house"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\electro\house\all"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -1066,6 +1162,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/synthwave"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\electro\synthwave"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -1083,6 +1182,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/chiptune"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\electro\chiptune"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -1100,6 +1202,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/trance"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\electro\trance"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -1117,6 +1222,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/future bass"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\electro\future bass"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
@@ -1134,6 +1242,9 @@ powershell.exe -Command "Set-Clipboard -Value $null"
 ping -n 2 127.0.0.1 >nul
 for /f %%a in ('powershell.exe -Command "(Get-Clipboard).Length"') do set "num_items=%%a"
 "%foobar%" /runcmd-playlist="File Operations/Link to/psybient & tribal"
+ping -n 2 127.0.0.1 >nul
+powershell.exe -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('{ENTER}');"
+ping -n 10 127.0.0.1 >nul
 set "folder=R:\Radio\genre-based\electro\psybient & tribal"
 for /f %%a in ('powershell.exe -Command "Get-ChildItem -Path '%folder%' -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3 | Measure-Object | Select-Object -ExpandProperty Count"') do set "num_files=%%a"
 if %num_files% equ %num_items% (
