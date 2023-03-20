@@ -7,7 +7,7 @@ function Compare-ItemCount($playlist, $folder, $linkto, $log) {
   # Empty clipboard, copy item titles and wait for clipboard to be populated
   Set-Clipboard -Value $null
   & $foobar "/runcmd-playlist=Utilities/Text Tools/Copy: Title"
-  Start-Sleep -Seconds 1
+  Start-Sleep -Seconds 2
   # Create a hardlink from the selected files to the target folder
   & $foobar "/runcmd-playlist=File Operations/Link to/$linkto"
   # Wait for the confirmation dialog to show
@@ -15,7 +15,7 @@ function Compare-ItemCount($playlist, $folder, $linkto, $log) {
   # Press enter to confirm the link creation
   [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
   # Wait for the link to be created and for clipboard to be populated
-  Start-Sleep -Seconds 10
+  Start-Sleep -Seconds 5
   # Count number of items in clipboard
   $num_items = (Get-Clipboard).Length
   # Count total number of files in each folder and compare with num_items
