@@ -17,7 +17,7 @@ function Compare-ItemCount($playlist, $folder, $linkto, $log) {
   # Wait for the link to be created and for clipboard to be populated
   Start-Sleep -Seconds 10
   # Count number of items in clipboard
-  $num_items = [System.Windows.Forms.Clipboard]::GetText().Split("`n").Count
+  $num_items = (Get-Clipboard).Length
   # Count total number of files in each folder and compare with num_items
   $num_files = (Get-ChildItem -Path $folder -Recurse -File -Include *.flac,*.m4a,*.mp3,*.ogg,*.ac3).Count
   if ($num_files -eq $num_items) {
