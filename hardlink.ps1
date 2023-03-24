@@ -6,7 +6,7 @@ function Compare-ItemCount($playlist, $folder, $linkto, $log) {
   Start-Sleep -Seconds 0.5
   & $foobar /run_main:"Edit/Select all"
   # Empty clipboard, copy item titles and wait for clipboard to be populated
-  Start-Sleep -Seconds 0.5
+  Start-Sleep -Seconds 1
   Set-Clipboard -Value $null
   & $foobar "/runcmd-playlist=Utilities/Text Tools/Copy: Title"
   Start-Sleep -Seconds 2
@@ -40,6 +40,7 @@ Set-Content -Path $log -Value ""
 # Call function for each playlist
 
 ## Section: new music, best of decades
+Compare-ItemCount "2023 & recently added 2022" "R:\Radio\new\best new music" "best new music" $log
 Compare-ItemCount "2023 - best tracks" "R:\Radio\new\best of 2023 (tracks)" "2023 tracks" $log
 Compare-ItemCount "2022 - best tracks" "R:\Radio\new\best of 2022 (tracks)" "2022 tracks" $log
 Compare-ItemCount "2021 - best tracks" "R:\Radio\new\best of 2021 (tracks)" "2021 tracks" $log
