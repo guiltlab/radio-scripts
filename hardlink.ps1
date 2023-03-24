@@ -3,6 +3,7 @@ Add-Type -AssemblyName System.Windows.Forms
 function Compare-ItemCount($playlist, $folder, $linkto, $log) {
   # Switch to playlist and select all items
   & $foobar /run_main:"View/Switch to playlist/$playlist"
+  Start-Sleep -Seconds 0.5
   & $foobar /run_main:"Edit/Select all"
   # Empty clipboard, copy item titles and wait for clipboard to be populated
   Set-Clipboard -Value $null
