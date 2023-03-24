@@ -6,6 +6,7 @@ function Compare-ItemCount($playlist, $folder, $linkto, $log) {
   Start-Sleep -Seconds 0.5
   & $foobar /run_main:"Edit/Select all"
   # Empty clipboard, copy item titles and wait for clipboard to be populated
+  Start-Sleep -Seconds 0.5
   Set-Clipboard -Value $null
   & $foobar "/runcmd-playlist=Utilities/Text Tools/Copy: Title"
   Start-Sleep -Seconds 2
