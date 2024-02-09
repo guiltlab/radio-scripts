@@ -1,4 +1,4 @@
-#!/bin/bash
+# !/bin/bash
 # this script recursively looks for all FLAC files in the current directory, finds those who have the same title
 # and prints all of them to a format usable for foobar2000 query
 # -i = Ignore differences in case when comparing lines
