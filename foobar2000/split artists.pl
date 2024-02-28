@@ -96,6 +96,17 @@
                     [%PLAYLIST%]
                 )
 
+        // chiptune
+            // one-liner
+                $if($and($strstr($lower(%genre%),chiptune),$not($strstr($lower(%PLAYLIST%),chiptune))),[%PLAYLIST%; ]Chiptune,[%PLAYLIST%])
+            // main code
+                $if($and(
+                        $strstr($lower(%genre%),chiptune),$not($strstr($lower(%PLAYLIST%),chiptune))
+                    ),
+                    [%PLAYLIST%; ]Chiptune,
+                    [%PLAYLIST%]
+                )
+
     // Add YEAR tag from ORIGINAL RELEASE DATE if possible, otherwise from DATE
     $if(%ORIGINAL RELEASE DATE%,$cut(%ORIGINAL RELEASE DATE%,4),$cut(%date%,4))
 
@@ -112,6 +123,20 @@
             $greater([%year%],1980),
             $not($strstr($lower(%PLAYLIST%),funk)),
             $not($strstr($lower(%EXCLUDE%),funk))
+            ),
+            $puts(kill,1)
+        )
+
+        $if($and(
+            $strstr($lower([%genre%]),chiptune),
+            $not($strstr($lower([%PLAYLIST%]),chiptune))
+            ),
+            $puts(kill,1)
+        )
+
+        $if($and(
+            $strstr($lower([%genre%]),jungle),
+            $not($strstr($lower([%PLAYLIST%]),jungle))
             ),
             $puts(kill,1)
         )
@@ -179,9 +204,17 @@
 
         $if($and(
             $strstr($lower(%genre%),funk),
+            $not($strstr($lower(%genre%),neurofunk)),
             $greater([%year%],1980),
             $not($strstr($lower(%PLAYLIST%),funk)),
             $not($strstr($lower(%EXCLUDE%),funk))
+            ),
+            $puts(kill,1)
+        )
+
+        $if($and(
+            $strstr($lower(%genre%),chiptune),
+            $not($strstr($lower(%PLAYLIST%),chiptune))
             ),
             $puts(kill,1)
         )
@@ -204,6 +237,13 @@
             [%genre%]
         )
    
+    // ALBUM COLUMN check
+
+        $if([%album%],
+        [%album%],
+        $rgb(222,33,71)MISSING
+        )
+
     // COVER COLUMN check
 
         $puts(size,[%front_cover_size%])
@@ -249,6 +289,26 @@
         )
 
         $get(coverstatus)
+
+    // FORMAT check
+
+        $puts(format,
+        $puts(DLM,'-')$puts(BRC,)$puts(KHZ,)$puts(BPS,)$puts(BTR,k)$puts(WST,1)$puts(CHN,$ifgreater($info(channels),2,$get(DLM)$info(channels)Ch,$ifequal($info(channels),1,$get(DLM)Mono,)))$puts(VBQ,$replace($info(bitrate_nominal),32,Q-2,45,Q-1,48,Q-1,64,Q0,80,Q1,96,Q2,112,Q3,128,Q4,160,Q5,192,Q6,224,Q7,227,Q7,256,Q8,320,Q9,500,Q10))$puts(BRS,$if($greater(%samplerate%,199000),,$if($and($strcmp(%samplerate%,44100),$strcmp($info(bitspersample),16),$strcmp($get(WST),0)),,$get(DLM)$info(bitspersample)$get(BPS)$get(DLM)$div(%samplerate%,1000)$get(KHZ))))$puts(EXT,$upper($if($or($stricmp($ext(%filename_ext%),aif),$stricmp($ext(%filename_ext%),aiff)),AIFF,$if($or($stricmp($ext(%filename_ext%),mid),$stricmp($ext(%filename_ext%),midi),$stricmp($ext(%filename_ext%),kar),$stricmp($ext(%filename_ext%),rmi)),MIDI,$ext(%filename_ext%)))))$puts(CDC,$replace($upper($replace($lower(%codec%),monkey''s audio,APE,wavpack,WVC,musepack,MPC)),' (FLOATING-POINT)',,IMA ADPCM,ADPCM,PCM,$get(EXT)))$puts(CPR,$upper($replace($lower($info(codec_profile)),quality ,q,'',,braindead,q8,insane,q7,xtreme,q1,standard,q5,radio,q4,thumb,q3,telephone,q2,unstable'/'experimental,UST,vbr ,))$get(VBQ))$puts(LSY,$get(CDC)$if($stricmp($get(CPR),CBR),$get(DLM)%bitrate%$get(BTR),$if($info(codec_profile),$get(DLM)$get(CPR),$if($info(bitrate_nominal),$get(DLM)$get(VBQ),))))$puts(LSL,$get(CDC)$get(BRS))$puts(FMT,$if($stricmp($info(encoding),lossy),$get(LSY),$if($stricmp($info(encoding),lossless),$get(LSL),$get(EXT))))$insert($get(BRC),$get(FMT)$get(CHN),1)
+        )
+
+        $if($stricmp(%codec%,FLAC),
+            $ifequal(%__bitspersample%,16,
+                $ifgreater(%samplerate%,48000,
+                    $get(EXT) %__bitspersample%/$left(%samplerate%,2),
+                    $get(EXT)
+                ),
+                $if([%WASTED BITS%],
+                    $get(EXT) %__bitspersample%/$left(%samplerate%,2) '('padded')',
+                    $rgb(222,33,71)$get(EXT) %__bitspersample%/$left(%samplerate%,2)
+                )
+            ),
+            $rgb(222,33,71)$get(format)
+        )
 
     // ALL CHECKS COLUMN
 
@@ -335,6 +395,7 @@
 
             $if($and(
                 $strstr($lower(%genre%),funk),
+                $not($strstr($lower(%genre%),neurofunk)),
                 $greater([%year%],1980),
                 $not($strstr($lower(%PLAYLIST%),funk)),
                 $not($strstr($lower(%EXCLUDE%),funk))
@@ -358,8 +419,15 @@
             $if([%codec%]=FLAC,
             $ifequal(%__bitspersample%,16,
             ,
+            $if($not([%WASTED BITS%]),
             $puts(warning,$add($get(warning),1))
+            )
             ),
+            $puts(kill,$add($get(kill),1))
+            )
+
+        // ALBUM CHECK
+            $if($not([%album%]),
             $puts(kill,$add($get(kill),1))
             )
 
