@@ -73,8 +73,66 @@
     // PLAYLIST: Add Jungle / modern funk playlist if applicable
         // jungle
             // one-liner
-                $if($strstr($lower(%genre%),jungle),$if($not($strstr($lower(%PLAYLIST%),jungle)),[%PLAYLIST%; ]Jungle,[%PLAYLIST%]),$if($strstr($lower(%PLAYLIST%),jungle),$replace([%PLAYLIST%],Jungle,),[%PLAYLIST%]))
+                $if($strstr($lower(%genre%),jungle),$if($not($or($strstr($lower(%genre%),hardcore),$strstr($lower(%EXCLUDE%),jungle))),$if($not($strstr($lower(%PLAYLIST%),jungle)),[%PLAYLIST%; ]Jungle,[%PLAYLIST%])),$if($strstr($lower(%PLAYLIST%),jungle),$replace([%PLAYLIST%],Jungle, ),[%PLAYLIST%]))
             // main code
+                $if($strstr($lower(%genre%),jungle),
+                    $if($not($or(
+                                $strstr($lower(%genre%),hardcore),
+                                $strstr($lower(%EXCLUDE%),jungle)
+                                )
+                            ),
+                        $if($not($strstr($lower(%PLAYLIST%),jungle)),
+                            [%PLAYLIST%; ]Jungle,
+                            [%PLAYLIST%]
+                            )
+                    ),
+                    $if($strstr($lower(%PLAYLIST%),jungle),
+                        $replace([%PLAYLIST%],Jungle, ),
+                        [%PLAYLIST%]
+                    )
+                )
+        // modern funk
+            // one-liner
+                $if($strstr($lower(%genre%),modern funk),$if($not($strstr($lower(%PLAYLIST%),modern funk)),[%PLAYLIST%; ]Modern Funk,[%PLAYLIST%]),$if($and($strstr($lower(%PLAYLIST%),modern funk),$not($strstr($lower(%genre%),funk))),$replace([%PLAYLIST%],Modern Funk, ),[%PLAYLIST%]))
+            // main code
+                $if($strstr($lower(%genre%),modern funk),
+                    $if($not($strstr($lower(%PLAYLIST%),modern funk)),
+                        [%PLAYLIST%; ]Modern Funk,[%PLAYLIST%]),
+                        $if($and($strstr($lower(%PLAYLIST%),modern funk),$not($strstr($lower(%genre%),funk))),
+                            $replace([%PLAYLIST%],Modern Funk, ),
+                            [%PLAYLIST%]
+                        )
+                    )
+
+        // chiptune
+            // one-liner
+                $if($strstr($lower(%genre%),chiptune),$if($not($strstr($lower(%PLAYLIST%),chiptune)),[%PLAYLIST%; ]Chiptune,[%PLAYLIST%]),$if($strstr($lower(%PLAYLIST%),chiptune),$replace([%PLAYLIST%],Chiptune,),[%PLAYLIST%]))
+            // main code
+                $if($strstr($lower(%genre%),chiptune),
+                    $if($not($strstr($lower(%PLAYLIST%),chiptune)),
+                        [%PLAYLIST%; ]Chiptune,
+                        [%PLAYLIST%]
+                    ),
+                    $if($strstr($lower(%PLAYLIST%),chiptune),
+                        $replace([%PLAYLIST%],Chiptune,),
+                        [%PLAYLIST%]
+                    )
+                )
+        // EXCLUDE from playlists
+            // one-liner
+                $if($strstr($lower([%genre%]),drumfunk),$if($not($strstr($lower([%EXCLUDE%]),funk)),$caps2([%EXCLUDE%;]Funk),$caps2([%EXCLUDE%])),$caps2([%EXCLUDE%]))
+            // main code
+                $if($strstr($lower([%genre%]),drumfunk),
+                    $if($not($strstr($lower([%EXCLUDE%]),funk)),
+                        $caps2([%EXCLUDE%;]Funk),
+                        $caps2([%EXCLUDE%])
+                    ),                        
+                    $caps2([%EXCLUDE%])
+                )
+
+        // ALL playlists (not used / does not work currently)
+
+            $puts(pls,
                 $if($strstr($lower(%genre%),jungle),
                     $if($not($strstr($lower(%PLAYLIST%),jungle)),
                         [%PLAYLIST%; ]Jungle,
@@ -85,32 +143,64 @@
                         [%PLAYLIST%]
                     )
                 )
-        // modern funk
-            // one-liner
-                $if($and($strstr($lower(%genre%),modern funk),$not($strstr($lower(%PLAYLIST%),modern funk))),[%PLAYLIST%; ]Modern Funk,[%PLAYLIST%])
-            // main code
-                $if($and(
-                        $strstr($lower(%genre%),modern funk),$not($strstr($lower(%PLAYLIST%),modern funk))
-                    ),
-                    [%PLAYLIST%; ]Modern Funk,
-                    [%PLAYLIST%]
+            )
+            $puts(pls,
+            $if($strstr($lower(%genre%),modern funk),
+                $if($not($strstr($lower($get(pls)),modern funk)),
+                    $get(pls)';' Modern Funk,),
+                    $if($and($strstr($lower($get(pls)),modern funk),$not($strstr($lower(%genre%),funk))),
+                        $replace($get(pls),Modern Funk,),
+                    )
+            )
+            
+            $if($strstr($lower(%genre%),chiptune),
+                $if($not($strstr($lower($get(pls)),chiptune)),
+                    [$get(pls)]Chiptune,
+                ),
+                $if($strstr($lower($get(pls)),chiptune),
+                    $replace($get(pls),Chiptune,),
                 )
+            )
+            )
 
-        // chiptune
-            // one-liner
-                $if($and($strstr($lower(%genre%),chiptune),$not($strstr($lower(%PLAYLIST%),chiptune))),[%PLAYLIST%; ]Chiptune,[%PLAYLIST%])
-            // main code
-                $if($and(
-                        $strstr($lower(%genre%),chiptune),$not($strstr($lower(%PLAYLIST%),chiptune))
-                    ),
-                    [%PLAYLIST%; ]Chiptune,
-                    [%PLAYLIST%]
-                )
-
+            $trim($ifequal($strstr($get(pls),';'),0,$replace($get(pls),';',),$get(pls)))
+            
     // Add YEAR tag from ORIGINAL RELEASE DATE if possible, otherwise from DATE
     $if(%ORIGINAL RELEASE DATE%,$cut(%ORIGINAL RELEASE DATE%,4),$cut(%date%,4))
 
 // COLUMNS CHECK
+    // TITLE column check
+        $if(%title%,
+            $if($or(
+                    $strstr($lower(%title%),'feat '),
+                    $strstr($lower(%title%),'feat.'),
+                    $strstr($lower(%title%),'featuring'),
+                    $strstr($lower(%title%),'featuring'),
+                    $strstr($lower(%title%),'ft.')
+                    $strstr($lower(%title%),'ft ')
+                    $strstr($lower(%title%),'(ft')
+                    ),
+                $puts(kill,1),
+                $if($or(
+                        $strstr($lower(%title%),'with')
+                        $strstr($lower(%title%),'ft')
+                    ),
+                    $puts(warning,1)
+                )
+            ),
+            $puts(missing,1)
+        )
+            $if($get(missing),
+                $rgb(222,33,71)MISSING,
+                $if($get(kill),
+                    $rgb(222,33,71)[%title%],
+                    $if($get(warning),
+                        $rgb(255,155,0)[%title%],
+                        [%title%]
+                    )
+                )
+            )
+
     // GENRE COLUMN check
         // MISSING if no genre / red color if modern funk but no playlist or exclude / yellow if only one genre
 
@@ -120,6 +210,7 @@
 
         $if($and(
             $strstr($lower(%genre%),funk),
+            $not($strstr($lower(%genre%),neurofunk)),
             $greater([%year%],1980),
             $not($strstr($lower(%PLAYLIST%),funk)),
             $not($strstr($lower(%EXCLUDE%),funk))
@@ -136,7 +227,8 @@
 
         $if($and(
             $strstr($lower([%genre%]),jungle),
-            $not($strstr($lower([%PLAYLIST%]),jungle))
+            $not($strstr($lower([%PLAYLIST%]),jungle)),
+            $not($strstr($lower([%EXCLUDE%]),jungle))
             ),
             $puts(kill,1)
         )
@@ -197,7 +289,41 @@
                 [%artist%]
             )
         )
-    // GENRE COLUMN check
+    
+
+    // ALBUM column check
+
+        $if([%album%],
+            $if($or(
+                    $strstr($lower([%album%]),remaster),
+                    $strstr($lower([%album%]),cd0),
+                    $strstr($lower([%album%]),cd1),
+                    $strstr($lower([%album%]),cd2),
+                    $strstr($lower([%album%]),cd3),
+                    $strstr($lower([%album%]),cd4),
+                    $strstr($lower([%album%]),cd5),
+                    $strstr($lower([%album%]),cd6),
+                    $strstr($lower([%album%]),cd7),
+                    $strstr($lower([%album%]),cd8),
+                    $strstr($lower([%album%]),cd9),
+                    $strstr($lower([%album%]),cd10),
+                    $strstr($lower([%album%]),disc),
+                    $strstr($lower([%album%]),disk),
+                    $strstr($lower([%album%]),reissue),
+                    $strstr($lower([%album%]),reissue),
+                    $strstr($lower([%album%]),'['),
+                    $strstr($lower([%album%]),']'),
+                    $strstr($lower([%album%]),'('),
+                    $strstr($lower([%album%]),')'),
+                    $strstr($lower([%album%]),'{'),
+                    $strstr($lower([%album%]),'}')
+                ),
+                $rgb(222,33,71)[%album%],
+                [%album%]
+            ),
+            $rgb(222,33,71)MISSING
+        )
+
         $if($not([%genre%]),
             $puts(missing,1)
         )
@@ -235,13 +361,6 @@
                 )
             ),
             [%genre%]
-        )
-   
-    // ALBUM COLUMN check
-
-        $if([%album%],
-        [%album%],
-        $rgb(222,33,71)MISSING
         )
 
     // COVER COLUMN check
@@ -311,6 +430,27 @@
         )
 
     // ALL CHECKS COLUMN
+        // TITLE column check
+            $if(%title%,
+                $if($or(
+                        $strstr($lower(%title%),'feat '),
+                        $strstr($lower(%title%),'feat.'),
+                        $strstr($lower(%title%),'featuring'),
+                        $strstr($lower(%title%),'featuring'),
+                        $strstr($lower(%title%),'ft.')
+                        $strstr($lower(%title%),'ft ')
+                        $strstr($lower(%title%),'(ft')
+                        ),
+                    $puts(kill,$add($get(kill),1)),
+                    $if($or(
+                            $strstr($lower(%title%),'with')
+                            $strstr($lower(%title%),'ft')
+                        ),
+                        $puts(warning,$add($get(warning),1))
+                    )
+                ),
+                $puts(kill,$add($get(kill),1))
+            )
 
         // FRONT COVER CHECK
 
@@ -405,13 +545,14 @@
 
             $if($and(
                     $strstr($lower(%genre%),jungle),
-                    $not($strstr($lower(%PLAYLIST%),jungle))
+                    $not($strstr($lower(%PLAYLIST%),jungle)),
+                    $not($strstr($lower(%EXCLUDE%),jungle))
                     ),
                 $puts(kill,$add($get(kill),1))
             )
 
             $if($not($meta(genre,1)),
-            $puts(warning,1)
+            $puts(warning,$add($get(warning),1))
             )
 
         // FORMAT CHECK
