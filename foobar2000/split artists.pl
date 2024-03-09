@@ -177,13 +177,12 @@
                     $strstr($lower(%title%),'featuring'),
                     $strstr($lower(%title%),'featuring'),
                     $strstr($lower(%title%),'ft.')
-                    $strstr($lower(%title%),'ft ')
                     $strstr($lower(%title%),'(ft')
                     ),
                 $puts(kill,1),
                 $if($or(
-                        $strstr($lower(%title%),'with')
-                        $strstr($lower(%title%),'ft')
+                        $strstr($lower(%title%),' with ')
+                        $strstr($lower(%title%),' ft ')
                     ),
                     $puts(warning,1)
                 )
@@ -438,13 +437,12 @@
                         $strstr($lower(%title%),'featuring'),
                         $strstr($lower(%title%),'featuring'),
                         $strstr($lower(%title%),'ft.')
-                        $strstr($lower(%title%),'ft ')
                         $strstr($lower(%title%),'(ft')
                         ),
                     $puts(kill,$add($get(kill),1)),
                     $if($or(
-                            $strstr($lower(%title%),'with')
-                            $strstr($lower(%title%),'ft')
+                            $strstr($lower(%title%),' with ')
+                            $strstr($lower(%title%),' ft ')
                         ),
                         $puts(warning,$add($get(warning),1))
                     )
