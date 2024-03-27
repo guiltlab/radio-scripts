@@ -163,10 +163,20 @@
             )
             )
 
-            $trim($ifequal($strstr($get(pls),';'),0,$replace($get(pls),';',),$get(pls)))
-            
-    // Add YEAR tag from ORIGINAL RELEASE DATE if possible, otherwise from DATE
-    $if(%ORIGINAL RELEASE DATE%,$cut(%ORIGINAL RELEASE DATE%,4),$cut(%date%,4))
+            $trim($ifequal($strstr($get(pls),';'),0,$replace($get(pls),';',),$get(pls)))      
+   
+    // YEAR: tag from ORIGINAL RELEASE DATE if possible, otherwise from RECORDING DATE, otherwise from DATE
+        // main code
+            $if(%ORIGINAL RELEASE DATE%,$cut(%ORIGINAL RELEASE DATE%,4),$if(%RECORDING DATE%,$cut(%RECORDING DATE%,4),$cut([%date%],4)))
+
+        // main code
+            $if(%ORIGINAL RELEASE DATE%,
+                $cut(%ORIGINAL RELEASE DATE%,4),
+                $if(%RECORDING DATE%,
+                    $cut(%RECORDING DATE%,4),
+                    $cut([%date%],4)
+                )
+            )
 
 // COLUMNS CHECK
     // TITLE column check
@@ -176,8 +186,12 @@
                     $strstr($lower(%title%),'feat.'),
                     $strstr($lower(%title%),'featuring'),
                     $strstr($lower(%title%),'featuring'),
-                    $strstr($lower(%title%),'ft.')
-                    $strstr($lower(%title%),'(ft')
+                    $strstr($lower(%title%),'ft.'),
+                    $strstr($lower(%title%),'(ft'),
+                    $ifgreater(
+                        $len($replace($lower(%title%),remix,)),
+                        $sub($len(%title%),5)
+                    )
                     ),
                 $puts(kill,1),
                 $if($or(
@@ -436,9 +450,13 @@
                         $strstr($lower(%title%),'feat.'),
                         $strstr($lower(%title%),'featuring'),
                         $strstr($lower(%title%),'featuring'),
-                        $strstr($lower(%title%),'ft.')
-                        $strstr($lower(%title%),'(ft')
-                        ),
+                        $strstr($lower(%title%),'ft.'),
+                        $strstr($lower(%title%),'(ft'),
+                        $greater(
+                            $sub($len(%title%),5),
+                            $len($replace($lower(%title%),remix,))
+                        )
+                    ),
                     $puts(kill,$add($get(kill),1)),
                     $if($or(
                             $strstr($lower(%title%),' with ')
