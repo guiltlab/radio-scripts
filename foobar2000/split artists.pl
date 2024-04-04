@@ -180,7 +180,7 @@
 
 // COLUMNS CHECK
     // TITLE column check
-        $if(%title%,
+        $if($meta(title),
             $if($or(
                     $strstr($lower(%title%),'feat '),
                     $strstr($lower(%title%),'feat.'),
@@ -444,7 +444,7 @@
 
     // ALL CHECKS COLUMN
         // TITLE column check
-            $if(%title%,
+            $if($meta(title),
                 $if($or(
                         $strstr($lower(%title%),'feat '),
                         $strstr($lower(%title%),'feat.'),
