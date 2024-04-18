@@ -1,6 +1,85 @@
 // NOT actually perl, only for display formatting reasons
 
 // SCRIPT
+    // GENRE: add missing genres, fix stuff...
+        // ELECTRONIC: add if missing
+            // one-liner
+                $if($not($strstr($lower(%genre%),electronic)),$if($or($strstr($lower(%genre%),house),$strstr($lower(%genre%),drum & bass),$strstr($lower(%genre%),jungle),$strstr($lower(%genre%),techno),$strstr($lower(%genre%),synthwave),$strstr($lower(%genre%),edm),$strstr($lower(%genre%),breakbeat),$strstr($lower(%genre%),breaks),$strstr($lower(%genre%),uk garage),$strstr($lower(%genre%),speed garage),$strstr($lower(%genre%),chiptune),$strstr($lower(%genre%),idm),$strstr($lower(%genre%),glitch hop),$strstr($lower(%genre%),dubstep),$strstr($lower(%genre%),brostep),$strstr($lower(%genre%),uk bass),$strstr($lower(%genre%),bass music)),[%genre%]; Electronic,[%genre%]),[%genre%])
+            // main code
+                $if($not($strstr($lower(%genre%),electronic)),
+                    $if(
+                        $or(
+                            $strstr($lower(%genre%),house),
+                            $strstr($lower(%genre%),drum & bass),
+                            $strstr($lower(%genre%),jungle),
+                            $strstr($lower(%genre%),techno),
+                            $strstr($lower(%genre%),synthwave),
+                            $strstr($lower(%genre%),edm),
+                            $strstr($lower(%genre%),breakbeat),
+                            $strstr($lower(%genre%),breaks),
+                            $strstr($lower(%genre%),uk garage),
+                            $strstr($lower(%genre%),speed garage),
+                            $strstr($lower(%genre%),chiptune),
+                            $strstr($lower(%genre%),idm),
+                            $strstr($lower(%genre%),glitch hop),
+                            $strstr($lower(%genre%),dubstep),
+                            $strstr($lower(%genre%),brostep),
+                            $strstr($lower(%genre%),uk bass),
+                            $strstr($lower(%genre%),bass music)
+                        ),
+                        [%genre%]; Electronic,
+                        [%genre%]
+                    ),
+                    [%genre%]
+                )
+        // JAZZ: add if missing
+            // one-liner
+                $ifequal($add($stricmp($meta(genre,0),jazz),$stricmp($meta(genre,1),jazz),$stricmp($meta(genre,2),jazz),$stricmp($meta(genre,3),jazz),$stricmp($meta(genre,4),jazz),$stricmp($meta(genre,5),jazz),$stricmp($meta(genre,6),jazz),$stricmp($meta(genre,7),jazz),$stricmp($meta(genre,8),jazz),$stricmp($meta(genre,9),jazz),$stricmp($meta(genre,10),jazz),$stricmp($meta(genre,11),jazz),$stricmp($meta(genre,12),jazz),$stricmp($meta(genre,13),jazz),$stricmp($meta(genre,14),jazz),$stricmp($meta(genre,15),jazz)),1,[%genre%],$if($or($strstr($lower(%genre%),contemporary jazz),$strstr($lower(%genre%),spiritual jazz),$strstr($lower(%genre%),nu jazz),$strstr($lower(%genre%),electro jazz),$strstr($lower(%genre%),afro jazz),$strstr($lower(%genre%),hard bop),$strstr($lower(%genre%),bebop),$strstr($lower(%genre%),post bop),$strstr($lower(%genre%),free jazz),$strstr($lower(%genre%),japanese jazz),$strstr($lower(%genre%),gypsy jazz),$strstr($lower(%genre%),jazz manouche),$strstr($lower(%genre%),jazz fusion),$strstr($lower(%genre%),afro cuban jazz),$strstr($lower(%genre%),south african jazz),$strstr($lower(%genre%),latin jazz)),[%genre%]; Jazz,[%genre%]))
+            // main code
+                $ifequal($add(
+                        $stricmp($meta(genre,0),jazz),
+                        $stricmp($meta(genre,1),jazz),
+                        $stricmp($meta(genre,2),jazz),
+                        $stricmp($meta(genre,3),jazz),
+                        $stricmp($meta(genre,4),jazz),
+                        $stricmp($meta(genre,5),jazz),
+                        $stricmp($meta(genre,6),jazz),
+                        $stricmp($meta(genre,7),jazz),
+                        $stricmp($meta(genre,8),jazz),
+                        $stricmp($meta(genre,9),jazz),
+                        $stricmp($meta(genre,10),jazz),
+                        $stricmp($meta(genre,11),jazz),
+                        $stricmp($meta(genre,12),jazz),
+                        $stricmp($meta(genre,13),jazz),
+                        $stricmp($meta(genre,14),jazz),
+                        $stricmp($meta(genre,15),jazz)
+                    ),
+                    1,
+                    [%genre%],
+                    $if(
+                        $or(
+                            $strstr($lower(%genre%),contemporary jazz),
+                            $strstr($lower(%genre%),spiritual jazz),
+                            $strstr($lower(%genre%),nu jazz),
+                            $strstr($lower(%genre%),electro jazz),
+                            $strstr($lower(%genre%),afro jazz),
+                            $strstr($lower(%genre%),hard bop),
+                            $strstr($lower(%genre%),bebop),
+                            $strstr($lower(%genre%),post bop),
+                            $strstr($lower(%genre%),free jazz),
+                            $strstr($lower(%genre%),japanese jazz),
+                            $strstr($lower(%genre%),gypsy jazz),
+                            $strstr($lower(%genre%),jazz manouche),
+                            $strstr($lower(%genre%),jazz fusion),
+                            $strstr($lower(%genre%),afro cuban jazz),
+                            $strstr($lower(%genre%),south african jazz),
+                            $strstr($lower(%genre%),latin jazz)
+                        ),
+                        [%genre%]; Jazz,
+                        [%genre%]
+                    )
+                )
+
     // ARTIST: Find "feat" and move artist to ARTIST field
 
         // one-liner
@@ -119,16 +198,28 @@
                     )
                 )
         // EXCLUDE from playlists
-            // one-liner
-                $if($strstr($lower([%genre%]),drumfunk),$if($not($strstr($lower([%EXCLUDE%]),funk)),$caps2([%EXCLUDE%;]Funk),$caps2([%EXCLUDE%])),$caps2([%EXCLUDE%]))
-            // main code
-                $if($strstr($lower([%genre%]),drumfunk),
-                    $if($not($strstr($lower([%EXCLUDE%]),funk)),
-                        $caps2([%EXCLUDE%;]Funk),
+            // funk in general
+                // one-liner
+                    $if($strstr($lower([%genre%]),drumfunk),$if($not($strstr($lower([%EXCLUDE%]),funk)),$caps2([%EXCLUDE%;]Funk),$caps2([%EXCLUDE%])),$caps2([%EXCLUDE%]))
+                // main code
+                    $if($strstr($lower([%genre%]),drumfunk),
+                        $if($not($strstr($lower([%EXCLUDE%]),funk)),
+                            $caps2([%EXCLUDE%;]Funk),
+                            $caps2([%EXCLUDE%])
+                        ),                        
                         $caps2([%EXCLUDE%])
-                    ),                        
-                    $caps2([%EXCLUDE%])
-                )
+                    )
+            // modern funk
+                // one-liner
+                    $if($strstr($lower([%genre%]),mellow funk),$if($not($strstr($lower([%EXCLUDE%]),modern funk)),$caps2([%EXCLUDE%;]Modern Funk),$caps2([%EXCLUDE%])),$caps2([%EXCLUDE%]))
+                // main code
+                    $if($strstr($lower([%genre%]),mellow funk),
+                        $if($not($strstr($lower([%EXCLUDE%]),modern funk)),
+                            $caps2([%EXCLUDE%;]Modern Funk),
+                            $caps2([%EXCLUDE%])
+                        ),                        
+                        $caps2([%EXCLUDE%])
+                    )
 
         // ALL playlists (not used / does not work currently)
 
