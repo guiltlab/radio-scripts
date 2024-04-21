@@ -34,9 +34,9 @@
                 )
         // JAZZ: add if missing
             // one-liner
-                $ifequal($add($stricmp($meta(genre,0),jazz),$stricmp($meta(genre,1),jazz),$stricmp($meta(genre,2),jazz),$stricmp($meta(genre,3),jazz),$stricmp($meta(genre,4),jazz),$stricmp($meta(genre,5),jazz),$stricmp($meta(genre,6),jazz),$stricmp($meta(genre,7),jazz),$stricmp($meta(genre,8),jazz),$stricmp($meta(genre,9),jazz),$stricmp($meta(genre,10),jazz),$stricmp($meta(genre,11),jazz),$stricmp($meta(genre,12),jazz),$stricmp($meta(genre,13),jazz),$stricmp($meta(genre,14),jazz),$stricmp($meta(genre,15),jazz)),1,[%genre%],$if($or($strstr($lower(%genre%),contemporary jazz),$strstr($lower(%genre%),spiritual jazz),$strstr($lower(%genre%),nu jazz),$strstr($lower(%genre%),electro jazz),$strstr($lower(%genre%),afro jazz),$strstr($lower(%genre%),hard bop),$strstr($lower(%genre%),bebop),$strstr($lower(%genre%),post bop),$strstr($lower(%genre%),free jazz),$strstr($lower(%genre%),japanese jazz),$strstr($lower(%genre%),gypsy jazz),$strstr($lower(%genre%),jazz manouche),$strstr($lower(%genre%),jazz fusion),$strstr($lower(%genre%),afro cuban jazz),$strstr($lower(%genre%),south african jazz),$strstr($lower(%genre%),latin jazz)),[%genre%]; Jazz,[%genre%]))
+                $ifgreater($add($stricmp($meta(genre,0),jazz),$stricmp($meta(genre,1),jazz),$stricmp($meta(genre,2),jazz),$stricmp($meta(genre,3),jazz),$stricmp($meta(genre,4),jazz),$stricmp($meta(genre,5),jazz),$stricmp($meta(genre,6),jazz),$stricmp($meta(genre,7),jazz),$stricmp($meta(genre,8),jazz),$stricmp($meta(genre,9),jazz),$stricmp($meta(genre,10),jazz),$stricmp($meta(genre,11),jazz),$stricmp($meta(genre,12),jazz),$stricmp($meta(genre,13),jazz),$stricmp($meta(genre,14),jazz),$stricmp($meta(genre,15),jazz)),0,[%genre%],$if($or($strstr($lower(%genre%),contemporary jazz),$strstr($lower(%genre%),spiritual jazz),$strstr($lower(%genre%),nu jazz),$strstr($lower(%genre%),electro jazz),$strstr($lower(%genre%),afro jazz),$strstr($lower(%genre%),hard bop),$strstr($lower(%genre%),bebop),$strstr($lower(%genre%),post bop),$strstr($lower(%genre%),free jazz),$strstr($lower(%genre%),japanese jazz),$strstr($lower(%genre%),gypsy jazz),$strstr($lower(%genre%),jazz manouche),$strstr($lower(%genre%),jazz fusion),$strstr($lower(%genre%),afro cuban jazz),$strstr($lower(%genre%),south african jazz),$strstr($lower(%genre%),latin jazz)),[%genre%]; Jazz,[%genre%]))
             // main code
-                $ifequal($add(
+                $ifgreater($add(
                         $stricmp($meta(genre,0),jazz),
                         $stricmp($meta(genre,1),jazz),
                         $stricmp($meta(genre,2),jazz),
@@ -54,7 +54,7 @@
                         $stricmp($meta(genre,14),jazz),
                         $stricmp($meta(genre,15),jazz)
                     ),
-                    1,
+                    0,
                     [%genre%],
                     $if(
                         $or(
@@ -76,6 +76,48 @@
                             $strstr($lower(%genre%),latin jazz)
                         ),
                         [%genre%]; Jazz,
+                        [%genre%]
+                    )
+                )
+
+        // HOUSE: add if missing
+            // one-liner
+                $ifgreater($add($stricmp($meta(genre,0),house),$stricmp($meta(genre,1),house),$stricmp($meta(genre,2),house),$stricmp($meta(genre,3),house),$stricmp($meta(genre,4),house),$stricmp($meta(genre,5),house),$stricmp($meta(genre,6),house),$stricmp($meta(genre,7),house),$stricmp($meta(genre,8),house),$stricmp($meta(genre,9),house),$stricmp($meta(genre,10),house),$stricmp($meta(genre,11),house),$stricmp($meta(genre,12),house),$stricmp($meta(genre,13),house),$stricmp($meta(genre,14),house),$stricmp($meta(genre,15),house)),0,[%genre%],$if($or($strstr($lower(%genre%),deep house),$strstr($lower(%genre%),jazzy house),$strstr($lower(%genre%),disco house),$strstr($lower(%genre%),french house),$strstr($lower(%genre%),afro house),$strstr($lower(%genre%),tech house),$strstr($lower(%genre%),tribal house),$strstr($lower(%genre%),funky house),$strstr($lower(%genre%),progressive house),$strstr($lower(%genre%),melodic house)),[%genre%]; House,[%genre%]))
+            // main code
+                $ifgreater($add(
+                        $stricmp($meta(genre,0),house),
+                        $stricmp($meta(genre,1),house),
+                        $stricmp($meta(genre,2),house),
+                        $stricmp($meta(genre,3),house),
+                        $stricmp($meta(genre,4),house),
+                        $stricmp($meta(genre,5),house),
+                        $stricmp($meta(genre,6),house),
+                        $stricmp($meta(genre,7),house),
+                        $stricmp($meta(genre,8),house),
+                        $stricmp($meta(genre,9),house),
+                        $stricmp($meta(genre,10),house),
+                        $stricmp($meta(genre,11),house),
+                        $stricmp($meta(genre,12),house),
+                        $stricmp($meta(genre,13),house),
+                        $stricmp($meta(genre,14),house),
+                        $stricmp($meta(genre,15),house)
+                    ),
+                    0,
+                    [%genre%],
+                    $if(
+                        $or(
+                            $strstr($lower(%genre%),deep house),
+                            $strstr($lower(%genre%),jazzy house),
+                            $strstr($lower(%genre%),disco house),
+                            $strstr($lower(%genre%),french house),
+                            $strstr($lower(%genre%),afro house),
+                            $strstr($lower(%genre%),tech house),
+                            $strstr($lower(%genre%),tribal house),
+                            $strstr($lower(%genre%),funky house),
+                            $strstr($lower(%genre%),progressive house),
+                            $strstr($lower(%genre%),melodic house)
+                        ),
+                        [%genre%]; House,
                         [%genre%]
                     )
                 )
