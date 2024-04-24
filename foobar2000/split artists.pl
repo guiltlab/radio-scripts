@@ -125,9 +125,12 @@
     // ARTIST: Find "feat" and move artist to ARTIST field
 
         // one-liner
-        $if($strstr($lower([%title%]),'('with),$puts(featuring,'('with)$puts(matchpos,$strstr($lower([%title%]),'('with)))$if($strstr($lower([%title%]),feat),$puts(featuring,feat)$puts(matchpos,$strstr($lower([%title%]),feat)))$if($strstr($lower([%title%]),feat.),$puts(featuring,feat.)$puts(matchpos,$strstr($lower([%title%]),feat.)))$if($strstr($lower([%title%]),'('feat.),$puts(featuring,'('feat.)$puts(matchpos,$strstr($lower([%title%]),'('feat.)))$if($strstr($lower([%title%]),featuring),$puts(featuring,featuring)$puts(matchpos,$strstr($lower([%title%]),featuring)))$if($strstr($lower([%title%]),'('featuring),$puts(featuring,'('featuring)$puts(matchpos,$strstr($lower([%title%]),'('featuring)))$if($get(matchpos),[%artist%;]$trim($replace($replace($substr(%title%,$get(matchpos),$len(%title%)),')',),$get(featuring),)),[%artist%])
+        $if($strstr($lower([%title%]),'('ft.),$puts(featuring,'('ft.)$puts(matchpos,$strstr($lower([%title%]),'('ft.)))$if($strstr($lower([%title%]),'('with),$puts(featuring,'('with)$puts(matchpos,$strstr($lower([%title%]),'('with)))$if($strstr($lower([%title%]),feat),$puts(featuring,feat)$puts(matchpos,$strstr($lower([%title%]),feat)))$if($strstr($lower([%title%]),feat.),$puts(featuring,feat.)$puts(matchpos,$strstr($lower([%title%]),feat.)))$if($strstr($lower([%title%]),'('feat.),$puts(featuring,'('feat.)$puts(matchpos,$strstr($lower([%title%]),'('feat.)))$if($strstr($lower([%title%]),featuring),$puts(featuring,featuring)$puts(matchpos,$strstr($lower([%title%]),featuring)))$if($strstr($lower([%title%]),'('featuring),$puts(featuring,'('featuring)$puts(matchpos,$strstr($lower([%title%]),'('featuring)))$if($get(matchpos),[%artist%;]$trim($replace($replace($substr(%title%,$get(matchpos),$len(%title%)),')',),$get(featuring),)),[%artist%])
 
         // main code
+        $if($strstr($lower([%title%]),'('ft.),$puts(featuring,'('ft.)
+        $puts(matchpos,$strstr($lower([%title%]),'('ft.))
+        )
         $if($strstr($lower([%title%]),'('with),$puts(featuring,'('with)
         $puts(matchpos,$strstr($lower([%title%]),'('with))
         )
@@ -162,9 +165,12 @@
     // TITLE: Find "feat" and remove artist from TITLE
 
         // one-liner
-        $if($strstr($lower([%title%]),'('with),$puts(featuring,'('with)$puts(matchpos,$strstr($lower([%title%]),'('with)))$if($strstr($lower([%title%]),feat),$puts(featuring,feat)$puts(matchpos,$strstr($lower([%title%]),feat)))$if($strstr($lower([%title%]),feat.),$puts(featuring,feat.)$puts(matchpos,$strstr($lower([%title%]),feat.)))$if($strstr($lower([%title%]),'('feat.),$puts(featuring,'('feat.)$puts(matchpos,$strstr($lower([%title%]),'('feat.)))$if($strstr($lower([%title%]),featuring),$puts(featuring,featuring)$puts(matchpos,$strstr($lower([%title%]),featuring)))$if($strstr($lower([%title%]),'('featuring),$puts(featuring,'('featuring)$puts(matchpos,$strstr($lower([%title%]),'('featuring)))$if($get(matchpos),$trim($substr(%title%,0,$sub($get(matchpos),1))),[%title%])
+        $if($strstr($lower([%title%]),'('ft.),$puts(featuring,'('ft.)$puts(matchpos,$strstr($lower([%title%]),'('ft.)))$if($strstr($lower([%title%]),'('with),$puts(featuring,'('with)$puts(matchpos,$strstr($lower([%title%]),'('with)))$if($strstr($lower([%title%]),feat),$puts(featuring,feat)$puts(matchpos,$strstr($lower([%title%]),feat)))$if($strstr($lower([%title%]),feat.),$puts(featuring,feat.)$puts(matchpos,$strstr($lower([%title%]),feat.)))$if($strstr($lower([%title%]),'('feat.),$puts(featuring,'('feat.)$puts(matchpos,$strstr($lower([%title%]),'('feat.)))$if($strstr($lower([%title%]),featuring),$puts(featuring,featuring)$puts(matchpos,$strstr($lower([%title%]),featuring)))$if($strstr($lower([%title%]),'('featuring),$puts(featuring,'('featuring)$puts(matchpos,$strstr($lower([%title%]),'('featuring)))$if($get(matchpos),$trim($substr(%title%,0,$sub($get(matchpos),1))),[%title%])
 
         // main code
+        $if($strstr($lower([%title%]),'('ft.),$puts(featuring,'('ft.)
+        $puts(matchpos,$strstr($lower([%title%]),'('ft.))
+        )
         $if($strstr($lower([%title%]),'('with),$puts(featuring,'('with)
         $puts(matchpos,$strstr($lower([%title%]),'('with))
         )
@@ -348,7 +354,7 @@
             )
 
     // GENRE COLUMN check
-        // MISSING if no genre / red color if modern funk but no playlist or exclude / yellow if only one genre
+        // MISSING if no genre / red color if modern funk but no playlist or exclude / check for weird chars / yellow if only one genre
 
         $if($not([%genre%]),
         $puts(missing,1)
@@ -375,6 +381,31 @@
             $strstr($lower([%genre%]),jungle),
             $not($strstr($lower([%PLAYLIST%]),jungle)),
             $not($strstr($lower([%EXCLUDE%]),jungle))
+            ),
+            $puts(kill,1)
+        )
+
+        $if($or(
+            $strchr([%genre%],'.'),
+            $strchr([%genre%],':'),
+            $strchr([%genre%],'+'),
+            $strchr([%genre%],'='),
+            $strchr([%genre%],'!'),
+            $strchr([%genre%],'?'),
+            $strchr([%genre%],'/'),
+            $strchr([%genre%],'\'),
+            $strchr([%genre%],'$'),
+            $strchr([%genre%],'^'),
+            $strchr([%genre%],'*'),
+            $strchr([%genre%],'('),
+            $strchr([%genre%],')'),
+            $strchr([%genre%],'['),
+            $strchr([%genre%],']'),
+            $strchr([%genre%],'{'),
+            $strstr([%genre%],'  '),
+            $strstr([%genre%],'   '),
+            $strstr([%genre%],'    '),
+            $strchr([%genre%],'}')
             ),
             $puts(kill,1)
         )
