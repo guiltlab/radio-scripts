@@ -426,6 +426,20 @@
             ),
         [%genre%]
         )
+    // DATE COLUMN (check if multi-value, if <4 char and if >10 chars)
+        $if([%date%],
+            $ifgreater($meta_num(date),1,
+                $rgb(222,33,71)[%date%],
+                $iflonger([%date%],10,
+                    $rgb(222,33,71)[%date%],
+                    $iflonger(0000,$len([%date%]),
+                        $rgb(222,33,71)[%date%],
+                        [%date%]
+                    )
+                )
+            ),
+        $rgb(222,33,71)MISSING
+        )
     // YEAR COLUMN check
         $if($meta(year),
             $if(%ORIGINAL RELEASE DATE%,
