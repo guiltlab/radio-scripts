@@ -354,78 +354,191 @@
             )
 
     // GENRE COLUMN check
-        // MISSING if no genre / red color if modern funk but no playlist or exclude / check for weird chars / yellow if only one genre
+        // MISSING if no genre
+            $if($not([%genre%]),
+            $puts(missing,1)
+            )
 
-        $if($not([%genre%]),
-        $puts(missing,1)
-        )
-
-        $if($and(
-            $strstr($lower(%genre%),funk),
-            $not($strstr($lower(%genre%),neurofunk)),
-            $greater([%year%],1980),
-            $not($strstr($lower(%PLAYLIST%),funk)),
-            $not($strstr($lower(%EXCLUDE%),funk))
-            ),
-            $puts(kill,1)
-        )
-
-        $if($and(
-            $strstr($lower([%genre%]),chiptune),
-            $not($strstr($lower([%PLAYLIST%]),chiptune))
-            ),
-            $puts(kill,1)
-        )
-
-        $if($and(
-            $strstr($lower([%genre%]),jungle),
-            $not($strstr($lower([%PLAYLIST%]),jungle)),
-            $not($strstr($lower([%EXCLUDE%]),jungle))
-            ),
-            $puts(kill,1)
-        )
-
-        $if($or(
-            $strchr([%genre%],'.'),
-            $strchr([%genre%],':'),
-            $strchr([%genre%],'+'),
-            $strchr([%genre%],'='),
-            $strchr([%genre%],'!'),
-            $strchr([%genre%],'?'),
-            $strchr([%genre%],'/'),
-            $strchr([%genre%],'\'),
-            $strchr([%genre%],'$'),
-            $strchr([%genre%],'^'),
-            $strchr([%genre%],'*'),
-            $strchr([%genre%],'('),
-            $strchr([%genre%],')'),
-            $strchr([%genre%],'['),
-            $strchr([%genre%],']'),
-            $strchr([%genre%],'{'),
-            $strstr([%genre%],'  '),
-            $strstr([%genre%],'   '),
-            $strstr([%genre%],'    '),
-            $strchr([%genre%],'}')
-            ),
-            $puts(kill,1)
-        )
-
-        $if($not($meta(genre,1)),
-        $puts(warning,1)
-        )
-
-        $if($or($get(missing),$get(kill),$get(warning)),
-            $if($get(missing),
-                $rgb(222,33,71)MISSING,
-                $if($get(kill),
-                    $rgb(222,33,71)[%genre%],
-                    $if($get(warning),
-                        $rgb(236,163,64)[%genre%]
+        // check for duplicate genre value (case-insensitive)
+            $if($or(
+                // compare genre 1 to genres 2-11
+                $if($meta(genre,0),
+                    $or(
+                        $stricmp($meta(genre,0),$meta(genre,1)),
+                        $stricmp($meta(genre,0),$meta(genre,2)),
+                        $stricmp($meta(genre,0),$meta(genre,3)),
+                        $stricmp($meta(genre,0),$meta(genre,4)),
+                        $stricmp($meta(genre,0),$meta(genre,5)),
+                        $stricmp($meta(genre,0),$meta(genre,6)),
+                        $stricmp($meta(genre,0),$meta(genre,7)),
+                        $stricmp($meta(genre,0),$meta(genre,8)),
+                        $stricmp($meta(genre,0),$meta(genre,9)),
+                        $stricmp($meta(genre,0),$meta(genre,10))
+                    )
+                ),
+                // compare genre 2 to genres 3-11
+                $if($meta(genre,1),
+                    $or(
+                        $stricmp($meta(genre,1),$meta(genre,2)),
+                        $stricmp($meta(genre,1),$meta(genre,3)),
+                        $stricmp($meta(genre,1),$meta(genre,4)),
+                        $stricmp($meta(genre,1),$meta(genre,5)),
+                        $stricmp($meta(genre,1),$meta(genre,6)),
+                        $stricmp($meta(genre,1),$meta(genre,7)),
+                        $stricmp($meta(genre,1),$meta(genre,8)),
+                        $stricmp($meta(genre,1),$meta(genre,9)),
+                        $stricmp($meta(genre,1),$meta(genre,10))
+                    )
+                ),
+                // genre 3 vs genres 4-11
+                $if($meta(genre,2),
+                    $or(
+                        $stricmp($meta(genre,2),$meta(genre,3)),
+                        $stricmp($meta(genre,2),$meta(genre,4)),
+                        $stricmp($meta(genre,2),$meta(genre,5)),
+                        $stricmp($meta(genre,2),$meta(genre,6)),
+                        $stricmp($meta(genre,2),$meta(genre,7)),
+                        $stricmp($meta(genre,2),$meta(genre,8)),
+                        $stricmp($meta(genre,2),$meta(genre,9)),
+                        $stricmp($meta(genre,2),$meta(genre,10))
+                    )
+                ),
+                // genre 4
+                $if($meta(genre,3),
+                    $or(
+                        $stricmp($meta(genre,3),$meta(genre,4)),
+                        $stricmp($meta(genre,3),$meta(genre,5)),
+                        $stricmp($meta(genre,3),$meta(genre,6)),
+                        $stricmp($meta(genre,3),$meta(genre,7)),
+                        $stricmp($meta(genre,3),$meta(genre,8)),
+                        $stricmp($meta(genre,3),$meta(genre,9)),
+                        $stricmp($meta(genre,3),$meta(genre,10))
+                    )
+                ),
+                // genre 5
+                $if($meta(genre,4),
+                    $or(
+                    $stricmp($meta(genre,4),$meta(genre,5)),
+                    $stricmp($meta(genre,4),$meta(genre,6)),
+                    $stricmp($meta(genre,4),$meta(genre,7)),
+                    $stricmp($meta(genre,4),$meta(genre,8)),
+                    $stricmp($meta(genre,4),$meta(genre,9)),
+                    $stricmp($meta(genre,4),$meta(genre,10))
+                    )
+                ),
+                // genre 6
+                $if($meta(genre,5),
+                    $or(
+                        $stricmp($meta(genre,5),$meta(genre,6)),
+                        $stricmp($meta(genre,5),$meta(genre,7)),
+                        $stricmp($meta(genre,5),$meta(genre,8)),
+                        $stricmp($meta(genre,5),$meta(genre,9)),
+                        $stricmp($meta(genre,5),$meta(genre,10))
+                    )
+                ),
+                // genre 7
+                $if($meta(genre,6),
+                    $or(
+                        $stricmp($meta(genre,6),$meta(genre,7)),
+                        $stricmp($meta(genre,6),$meta(genre,8)),
+                        $stricmp($meta(genre,6),$meta(genre,9)),
+                        $stricmp($meta(genre,6),$meta(genre,10))
+                    )
+                ),
+                // genre 8
+                $if($meta(genre,7),
+                    $or(
+                        $stricmp($meta(genre,7),$meta(genre,8)),
+                        $stricmp($meta(genre,7),$meta(genre,9)),
+                        $stricmp($meta(genre,7),$meta(genre,10))
+                    )
+                ),
+                // genre 9
+                $if($meta(genre,8),
+                    $or(
+                    $stricmp($meta(genre,8),$meta(genre,9)),
+                    $stricmp($meta(genre,8),$meta(genre,10))
+                    )
+                ),
+                // genre 10
+                $if($meta(genre,9),
+                    $or(
+                        $stricmp($meta(genre,9),$meta(genre,10))
                     )
                 )
-            ),
-        [%genre%]
-        )
+                ),
+            $puts(kill,1)
+            )
+
+        // red color if modern funk/chiptune/jungle but no playlist or exclude 
+            $if($and(
+                $strstr($lower(%genre%),funk),
+                $not($strstr($lower(%genre%),neurofunk)),
+                $greater([%year%],1980),
+                $not($strstr($lower(%PLAYLIST%),funk)),
+                $not($strstr($lower(%EXCLUDE%),funk))
+                ),
+                $puts(kill,1)
+            )
+
+            $if($and(
+                $strstr($lower([%genre%]),chiptune),
+                $not($strstr($lower([%PLAYLIST%]),chiptune))
+                ),
+                $puts(kill,1)
+            )
+
+            $if($and(
+                $strstr($lower([%genre%]),jungle),
+                $not($strstr($lower([%PLAYLIST%]),jungle)),
+                $not($strstr($lower([%EXCLUDE%]),jungle))
+                ),
+                $puts(kill,1)
+            )
+        // check for weird chars
+            $if($or(
+                $strchr([%genre%],'.'),
+                $strchr([%genre%],':'),
+                $strchr([%genre%],'+'),
+                $strchr([%genre%],'='),
+                $strchr([%genre%],'!'),
+                $strchr([%genre%],'?'),
+                $strchr([%genre%],'/'),
+                $strchr([%genre%],'\'),
+                $strchr([%genre%],'$'),
+                $strchr([%genre%],'^'),
+                $strchr([%genre%],'*'),
+                $strchr([%genre%],'('),
+                $strchr([%genre%],')'),
+                $strchr([%genre%],'['),
+                $strchr([%genre%],']'),
+                $strchr([%genre%],'{'),
+                $strstr([%genre%],'  '),
+                $strstr([%genre%],'   '),
+                $strstr([%genre%],'    '),
+                $strchr([%genre%],'}')
+                ),
+                $puts(kill,1)
+            )
+
+        // warning if single genre
+            $if($not($meta(genre,1)),
+            $puts(warning,1)
+            )
+
+        // execute script
+            $if($or($get(missing),$get(kill),$get(warning)),
+                $if($get(missing),
+                    $rgb(222,33,71)MISSING,
+                    $if($get(kill),
+                        $rgb(222,33,71)[%genre%],
+                        $if($get(warning),
+                            $rgb(236,163,64)[%genre%]
+                        )
+                    )
+                ),
+            [%genre%]
+            )
     // DATE COLUMN (check if multi-value, if <4 char and if >10 chars)
         $if([%date%],
             $ifgreater($meta_num(date),1,
@@ -440,6 +553,7 @@
             ),
         $rgb(222,33,71)MISSING
         )
+        
     // YEAR COLUMN check
         $if($meta(year),
             $if(%ORIGINAL RELEASE DATE%,
@@ -452,6 +566,23 @@
             $rgb(222,33,71)MISSING
         )
 
+        $if($and($meta(year),$longer($meta(year),123),$longer(12345,$meta(year))),
+                $if(%ORIGINAL RELEASE DATE%,
+                    $ifequal($meta(year),$left(%ORIGINAL RELEASE DATE%,4),
+                        $meta(year),
+                        $if(%RECORDING DATE%,
+                            $ifequal($meta(year),$left(%RECORDING DATE%,4),
+                                $meta(year),
+                                $rgb(222,33,71)WRONG!
+                            ),
+                        $rgb(222,33,71)WRONG!
+                        )
+                    ),
+                    $meta(year)
+                ),
+            $rgb(222,33,71)MISSING
+        )
+                    
     // ARTIST COLUMN check
         // color titles with "feat" and more than one "&"
 
@@ -504,54 +635,19 @@
                     $strstr($lower([%album%]),reissue),
                     $strstr($lower([%album%]),'['),
                     $strstr($lower([%album%]),']'),
-                    $strstr($lower([%album%]),'('),
-                    $strstr($lower([%album%]),')'),
                     $strstr($lower([%album%]),'{'),
                     $strstr($lower([%album%]),'}')
                 ),
                 $rgb(222,33,71)[%album%],
-                [%album%]
-            ),
-            $rgb(222,33,71)MISSING
-        )
-
-        $if($not([%genre%]),
-            $puts(missing,1)
-        )
-
-        $if($and(
-            $strstr($lower(%genre%),funk),
-            $not($strstr($lower(%genre%),neurofunk)),
-            $greater([%year%],1980),
-            $not($strstr($lower(%PLAYLIST%),funk)),
-            $not($strstr($lower(%EXCLUDE%),funk))
-            ),
-            $puts(kill,1)
-        )
-
-        $if($and(
-            $strstr($lower(%genre%),chiptune),
-            $not($strstr($lower(%PLAYLIST%),chiptune))
-            ),
-            $puts(kill,1)
-        )
-
-        $if($not($meta(genre,1)),
-            $puts(warning,1)
-        )
-
-        $if($or(
-            $get(missing),$get(kill),$get(warning)),
-            $if($get(missing),
-                $rgb(222,33,71)MISSING,
-                $if($get(kill),
-                    $rgb(222,33,71)[%genre%],
-                    $if($get(warning),
-                        $rgb(236,163,64)[%genre%]
+                $if($or(
+                    $strstr($lower([%album%]),'('),
+                    $strstr($lower([%album%]),')')
+                    ),
+                    $rgb(249,213,6)[%album%],
+                    [%album%]
                     )
-                )
-            ),
-            [%genre%]
+                ),
+            $rgb(222,33,71)MISSING
         )
 
     // COVER COLUMN check
@@ -685,13 +781,19 @@
 
         // YEAR TAG CHECK
 
-            $if($meta(year),
-                $if(%ORIGINAL RELEASE DATE%,
-                    $ifequal($meta(year),$left(%ORIGINAL RELEASE DATE%,4),
-                        ,
-                        $puts(kill,$add($get(kill),1))
+            $if($and($meta(year),$longer($meta(year),123),$longer(12345,$meta(year))),
+                    $if(%ORIGINAL RELEASE DATE%,
+                        $ifequal($meta(year),$left(%ORIGINAL RELEASE DATE%,4),
+                            ,
+                            $if(%RECORDING DATE%,
+                                $ifequal($meta(year),$left(%RECORDING DATE%,4),
+                                    ,
+                                    $puts(kill,$add($get(kill),1))
+                                ),
+                            $puts(kill,$add($get(kill),1))
+                            )
+                        ),
                     ),
-                ),
                 $puts(kill,$add($get(kill),1))
             )
 
@@ -722,6 +824,115 @@
             )
 
         // GENRES CHECK
+             $if($or(
+                // compare genre 1 to genres 2-11
+                $if($meta(genre,0),
+                    $or(
+                        $stricmp($meta(genre,0),$meta(genre,1)),
+                        $stricmp($meta(genre,0),$meta(genre,2)),
+                        $stricmp($meta(genre,0),$meta(genre,3)),
+                        $stricmp($meta(genre,0),$meta(genre,4)),
+                        $stricmp($meta(genre,0),$meta(genre,5)),
+                        $stricmp($meta(genre,0),$meta(genre,6)),
+                        $stricmp($meta(genre,0),$meta(genre,7)),
+                        $stricmp($meta(genre,0),$meta(genre,8)),
+                        $stricmp($meta(genre,0),$meta(genre,9)),
+                        $stricmp($meta(genre,0),$meta(genre,10))
+                    )
+                ),
+                // compare genre 2 to genres 3-11
+                $if($meta(genre,1),
+                    $or(
+                        $stricmp($meta(genre,1),$meta(genre,2)),
+                        $stricmp($meta(genre,1),$meta(genre,3)),
+                        $stricmp($meta(genre,1),$meta(genre,4)),
+                        $stricmp($meta(genre,1),$meta(genre,5)),
+                        $stricmp($meta(genre,1),$meta(genre,6)),
+                        $stricmp($meta(genre,1),$meta(genre,7)),
+                        $stricmp($meta(genre,1),$meta(genre,8)),
+                        $stricmp($meta(genre,1),$meta(genre,9)),
+                        $stricmp($meta(genre,1),$meta(genre,10))
+                    )
+                ),
+                // genre 3 vs genres 4-11
+                $if($meta(genre,2),
+                    $or(
+                        $stricmp($meta(genre,2),$meta(genre,3)),
+                        $stricmp($meta(genre,2),$meta(genre,4)),
+                        $stricmp($meta(genre,2),$meta(genre,5)),
+                        $stricmp($meta(genre,2),$meta(genre,6)),
+                        $stricmp($meta(genre,2),$meta(genre,7)),
+                        $stricmp($meta(genre,2),$meta(genre,8)),
+                        $stricmp($meta(genre,2),$meta(genre,9)),
+                        $stricmp($meta(genre,2),$meta(genre,10))
+                    )
+                ),
+                // genre 4
+                $if($meta(genre,3),
+                    $or(
+                        $stricmp($meta(genre,3),$meta(genre,4)),
+                        $stricmp($meta(genre,3),$meta(genre,5)),
+                        $stricmp($meta(genre,3),$meta(genre,6)),
+                        $stricmp($meta(genre,3),$meta(genre,7)),
+                        $stricmp($meta(genre,3),$meta(genre,8)),
+                        $stricmp($meta(genre,3),$meta(genre,9)),
+                        $stricmp($meta(genre,3),$meta(genre,10))
+                    )
+                ),
+                // genre 5
+                $if($meta(genre,4),
+                    $or(
+                    $stricmp($meta(genre,4),$meta(genre,5)),
+                    $stricmp($meta(genre,4),$meta(genre,6)),
+                    $stricmp($meta(genre,4),$meta(genre,7)),
+                    $stricmp($meta(genre,4),$meta(genre,8)),
+                    $stricmp($meta(genre,4),$meta(genre,9)),
+                    $stricmp($meta(genre,4),$meta(genre,10))
+                    )
+                ),
+                // genre 6
+                $if($meta(genre,5),
+                    $or(
+                        $stricmp($meta(genre,5),$meta(genre,6)),
+                        $stricmp($meta(genre,5),$meta(genre,7)),
+                        $stricmp($meta(genre,5),$meta(genre,8)),
+                        $stricmp($meta(genre,5),$meta(genre,9)),
+                        $stricmp($meta(genre,5),$meta(genre,10))
+                    )
+                ),
+                // genre 7
+                $if($meta(genre,6),
+                    $or(
+                        $stricmp($meta(genre,6),$meta(genre,7)),
+                        $stricmp($meta(genre,6),$meta(genre,8)),
+                        $stricmp($meta(genre,6),$meta(genre,9)),
+                        $stricmp($meta(genre,6),$meta(genre,10))
+                    )
+                ),
+                // genre 8
+                $if($meta(genre,7),
+                    $or(
+                        $stricmp($meta(genre,7),$meta(genre,8)),
+                        $stricmp($meta(genre,7),$meta(genre,9)),
+                        $stricmp($meta(genre,7),$meta(genre,10))
+                    )
+                ),
+                // genre 9
+                $if($meta(genre,8),
+                    $or(
+                    $stricmp($meta(genre,8),$meta(genre,9)),
+                    $stricmp($meta(genre,8),$meta(genre,10))
+                    )
+                ),
+                // genre 10
+                $if($meta(genre,9),
+                    $or(
+                        $stricmp($meta(genre,9),$meta(genre,10))
+                    )
+                )
+                ),
+            $puts(kill,$add($get(kill),1))
+            )
 
             $if($not([%genre%]),
             $puts(kill,$add($get(kill),1))
@@ -761,7 +972,7 @@
             $puts(kill,$add($get(kill),1))
             )
 
-        // ALBUM CHECK
+        // ALBUM CHECK (incomplete)
             $if($not([%album%]),
             $puts(kill,$add($get(kill),1))
             )
