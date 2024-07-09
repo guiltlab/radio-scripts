@@ -1,6 +1,22 @@
 // NOT actually perl, only for display formatting reasons
 
 // SCRIPT
+    // TRACKNUMBER: check format and fix if necessary (output: 2 digits with leading zero if applicable)
+        // one-liner
+        $trim($if([%tracknumber%],$iflonger([%tracknumber%],2,$if($puts(truncate_position,$strchr([%tracknumber%],/)),$cut([%tracknumber%],$sub($get(truncate_position),1)),[%tracknumber%]),[%tracknumber%])))
+        // main code
+            $trim(
+                $if([%tracknumber%],
+                    $iflonger([%tracknumber%],2,
+                    $if($puts(truncate_position,$strchr([%tracknumber%],/)),
+                    $cut([%tracknumber%],$sub($get(truncate_position),1)),
+                    [%tracknumber%]
+                    ),
+                    [%tracknumber%]
+                    )
+                )
+            )
+
     // GENRE: add missing genres, fix stuff...
         // ELECTRONIC: add if missing
             // one-liner
@@ -318,6 +334,9 @@
             )
 
 // COLUMNS CHECK
+    // TRACKNUMBER column
+
+
     // TITLE column check
         $if($meta(title),
             $if($or(
@@ -715,6 +734,81 @@
             ),
             $rgb(222,33,71)$get(format)
         )
+
+    // PATH column
+        $if($strstr(%path%,\Music\),
+            $if( 
+                $or(
+                $strstr(%path%,\HEYLISTEN\),
+                $strstr(%path%,\LIKED\)
+                ),
+                $puts(path_string_color,$rgb(249,213,6)),
+                $if($or(
+                    $strstr(%path%,\WIPREWORK\),
+                    $strstr(%path%,\NOGENRE\)
+                    ),
+                    $puts(path_string_color,$rgb(222,33,71)),
+                    $puts(path_string_color,$rgb(50,130,180))
+                    $puts(path_string,Selected)
+                )
+            )
+            )
+
+        $if($or(
+            $strstr(%path%,\everything-OGG\),
+            $strstr(%path%,\Uploads\)
+            ),
+            $puts(path_string_color,$rgb(14,171,49))
+        )
+        $if($or(
+            $strstr(%path%,R:\Radio\),
+            $strstr(%path%,\M-tags\ssd\)
+            ),
+            $puts(path_string_color,$rgb(255,0,200))
+        )
+
+        $if($and(
+            $strstr(%path%,R:\Radio\),
+            $not($strstr(%path%,R:\Radio\everything\))
+            ),
+            $puts(path_string_color,$rgb(0,250,200))
+        )
+
+        $if($strstr(%path%,\M-tags\ssd\),
+        $puts(path_string,SSD-MTAG)
+        )
+        $if($strstr(%path%,\HEYLISTEN\),
+        $puts(path_string,HEYLISTEN)
+        )
+        $if($strstr(%path%,\LIKED\),
+        $puts(path_string,LIKED)
+        )
+        $if($strstr(%path%,\WIPREWORK\),
+        $puts(path_string,WIP)
+        )
+        $if($strstr(%path%,\NOGENRE\),
+        $puts(path_string,NO GENRE)
+        )
+        $if($strstr(%path%,\everything-OGG\),
+        $puts(path_string,OGG Radio)
+        )
+        $if($strstr(%path%,\new\),
+        $puts(path_string,New)
+        )
+        $if($strstr(%path%,\best new music\),
+        $puts(path_string,Best new music)
+        )
+        $if($strstr(%path%,\genre-based\),
+        $puts(path_string,Genre-based)
+        )
+        $if($strstr(%path%,\region-based\),
+        $puts(path_string,Uploads)
+        )
+        $if($strstr(%path%,\soundtracks\),
+        $puts(path_string,Soundtracks)
+        )
+
+        $get(path_string_color)$get(path_string)
 
     // ALL CHECKS COLUMN
         // TITLE column check
