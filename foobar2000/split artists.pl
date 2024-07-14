@@ -493,7 +493,7 @@
             $if($and(
                 $strstr($lower(%genre%),funk),
                 $not($strstr($lower(%genre%),neurofunk)),
-                $greater([%year%],1980),
+                $greater([%year%],1995),
                 $not($strstr($lower(%PLAYLIST%),funk)),
                 $not($strstr($lower(%EXCLUDE%),funk))
                 ),
@@ -510,6 +510,10 @@
             $if($and(
                 $strstr($lower([%genre%]),jungle),
                 $not($strstr($lower([%PLAYLIST%]),jungle)),
+                $not($and(
+                    $strstr($lower([%PLAYLIST%]),drum),
+                    $strstr($lower([%PLAYLIST%]),bass)
+                )),
                 $not($strstr($lower([%EXCLUDE%]),jungle))
                 ),
                 $puts(kill,1)
@@ -574,31 +578,24 @@
         )
         
     // YEAR COLUMN check
+        // multiply YEAR by 1 ==> if equals 0 then YEAR is not a number
         $if($meta(year),
-            $if(%ORIGINAL RELEASE DATE%,
-                $ifequal($meta(year),$left(%ORIGINAL RELEASE DATE%,4),
-                    $meta(year),
-                    $rgb(222,33,71)WRONG!
-                ),
-                $meta(year)
-            ),
-            $rgb(222,33,71)MISSING
-        )
-
-        $if($and($meta(year),$longer($meta(year),123),$longer(12345,$meta(year))),
-                $if(%ORIGINAL RELEASE DATE%,
-                    $ifequal($meta(year),$left(%ORIGINAL RELEASE DATE%,4),
-                        $meta(year),
-                        $if(%RECORDING DATE%,
-                            $ifequal($meta(year),$left(%RECORDING DATE%,4),
-                                $meta(year),
-                                $rgb(222,33,71)WRONG!
-                            ),
-                        $rgb(222,33,71)WRONG!
-                        )
+            $if($and($longer($meta(year),123),$longer(12345,$meta(year)),$greater($meta(year),1)),
+                    $if(%ORIGINAL RELEASE DATE%,
+                        $ifequal($meta(year),$left(%ORIGINAL RELEASE DATE%,4),
+                            $meta(year),
+                            $if(%RECORDING DATE%,
+                                $ifequal($meta(year),$left(%RECORDING DATE%,4),
+                                    $meta(year),
+                                    $rgb(222,33,71)WRONG!
+                                ),
+                            $rgb(222,33,71)WRONG!
+                            )
+                        ),
+                        $meta(year)
                     ),
-                    $meta(year)
-                ),
+                $rgb(222,33,71)WRONG!
+            ),
             $rgb(222,33,71)MISSING
         )
                     
@@ -773,6 +770,11 @@
             ),
             $puts(path_string_color,$rgb(0,250,200))
         )
+        $if($and(
+            $strstr(%path%,D:\Radio\)
+            ),
+            $puts(path_string_color,$rgb(50,130,180))
+        )
 
         $if($strstr(%path%,\M-tags\ssd\),
         $puts(path_string,SSD-MTAG)
@@ -792,6 +794,12 @@
         $if($strstr(%path%,\everything-OGG\),
         $puts(path_string,OGG Radio)
         )
+        $if($strstr(%path%,\Radio\everything\),
+        $puts(path_string,ALL)
+        )
+        $if($strstr(%path%,\Radio\everything-except-OST\),
+        $puts(path_string,ALL/No OST)
+        )
         $if($strstr(%path%,\new\),
         $puts(path_string,New)
         )
@@ -808,7 +816,7 @@
         $puts(path_string,Soundtracks)
         )
 
-        $get(path_string_color)$get(path_string)
+        $get(path_string_color)$cut(%path%,1): $get(path_string)
 
     // ALL CHECKS COLUMN
         // TITLE column check
@@ -875,7 +883,7 @@
 
         // YEAR TAG CHECK
 
-            $if($and($meta(year),$longer($meta(year),123),$longer(12345,$meta(year))),
+            $if($and($meta(year),$longer($meta(year),123),$longer(12345,$meta(year)),$greater($meta(year),1)),
                     $if(%ORIGINAL RELEASE DATE%,
                         $ifequal($meta(year),$left(%ORIGINAL RELEASE DATE%,4),
                             ,
@@ -1035,7 +1043,7 @@
             $if($and(
                 $strstr($lower(%genre%),funk),
                 $not($strstr($lower(%genre%),neurofunk)),
-                $greater([%year%],1980),
+                $greater([%year%],1995),
                 $not($strstr($lower(%PLAYLIST%),funk)),
                 $not($strstr($lower(%EXCLUDE%),funk))
                 ),
@@ -1090,4 +1098,11 @@
             ' | Tagged',
             $rgb(249,213,6)
             ' | Tagged')
+            )
+            $if($and(
+                %PROCESSED%,
+                $not($strstr($lower(%path%),tagged))
+                ),
+                $rgb(0,166,0)
+                ' | Checked'
             )

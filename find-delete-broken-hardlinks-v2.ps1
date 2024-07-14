@@ -4,7 +4,13 @@
 
 # Define the directories to check
 $directoriesToCheck = @(
-    "D:\Radio\new\"
+    #"D:\Radio\new\",
+	#"D:\Radio\soundtracks\"#,
+    "D:\Radio\genre-based\electro\dnb\"#,
+	#"D:\Radio\genre-based\",
+	#"D:\Radio\region-based\",
+	#"D:\Radio\decades\",
+	#"D:\Radio\everything-except-OST\"
 )
 
 # Define the reference directory
@@ -44,7 +50,7 @@ foreach ($dir in $directoriesToCheck) {
 
 # List the files that will be deleted
 if ($filesToDelete.Count -gt 0) {
-    Write-Output "The following files will be deleted:"
+    Write-Output "The following "$filesToDelete.Count " files will be deleted:"
     $filesToDelete | ForEach-Object { Write-Output $_ }
 
     # Prompt for confirmation
