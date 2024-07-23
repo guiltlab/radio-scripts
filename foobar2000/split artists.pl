@@ -578,23 +578,25 @@
         )
         
     // YEAR COLUMN check
-        // multiply YEAR by 1 ==> if equals 0 then YEAR is not a number
+        // check if YEAR > 1 ==> if not then YEAR is not a number
         $if($meta(year),
             $if($and($longer($meta(year),123),$longer(12345,$meta(year)),$greater($meta(year),1)),
                     $if(%ORIGINAL RELEASE DATE%,
                         $ifequal($meta(year),$left(%ORIGINAL RELEASE DATE%,4),
                             $meta(year),
-                            $if(%RECORDING DATE%,
-                                $ifequal($meta(year),$left(%RECORDING DATE%,4),
-                                    $meta(year),
-                                    $rgb(222,33,71)WRONG!
-                                ),
                             $rgb(222,33,71)WRONG!
-                            )
                         ),
-                        $meta(year)
+                        $if(%RECORDING DATE%,
+                            $ifequal($meta(year),$left(%RECORDING DATE%,4),
+                                $meta(year),
+                                $rgb(222,33,71)WRONG!
+                            ),
+                            $ifequal($meta(year),$left(%DATE%,4),
+                                $meta(year),
+                                $rgb(222,33,71)WRONG!
+                            ))
                     ),
-                $rgb(222,33,71)WRONG!
+                    $rgb(222,33,71)WRONG!
             ),
             $rgb(222,33,71)MISSING
         )
@@ -818,6 +820,69 @@
 
         $get(path_string_color)$cut(%path%,1): $get(path_string)
 
+    // PADDING column
+        // Estimate padding based on bitrate vs length (INACCURATE) - cover size
+
+        // FRONT COVER CHECK
+
+        $puts(size,[%front_cover_size%])
+        $puts(bytes,[%front_cover_bytes%])
+        $puts(format,[%front_cover_format%])
+        $puts(height,[%front_cover_height%])
+        $puts(width,[%front_cover_width%])
+
+        $puts(coverres,
+        $ifequal($mod([%front_cover_height%],[%front_cover_width%]),0,
+        [%front_cover_width%]px,[%front_cover_width%]x[%front_cover_height%])
+        )
+
+        $puts(coverstatus,
+        $ifgreater(1,$len($get(size)),
+        $rgb(222,33,71)MISSING,
+        $ifgreater(500,$max($get(height),$get(width)),
+        $rgb(222,33,71)$get(coverres)
+        $rgb(),
+        $get(coverres)
+        )
+        )
+
+        $ifgreater($get(bytes),300000,
+        | $rgb(222,33,71)$get(size)
+        $rgb(),
+        $if($and($greater($get(bytes),200000),
+        $greater($max($get(height),$get(width)),600)
+        ),
+        | $rgb(249,213,6)$get(size)
+        $rgb(),
+        $if($get(size),
+        | $get(size)
+        )
+        )
+        )
+
+        $ifequal($stricmp($get(format),JPEG),1,
+        ,
+        $rgb(255,249,0)$get(format)$rgb()
+        )
+
+        )
+
+        // TOTAL PADDING ESTIMATE
+        $puts(padding_total,
+        $div($sub(%filesize%,$mul(%bitrate%,%length_seconds_fp%,125)),1024)
+        )
+        // excess padding (total - cover size)
+        $puts(padding,
+        $sub($get(padding_total),$get(size))
+        )
+
+        $ifgreater($get(padding),99,
+        $get(padding) KB,
+        $ifgreater($get(padding),70,
+        $rgb(249,213,6)$get(padding) KB,
+        $rgb(222,33,71)$get(padding) KB
+        )
+        )
     // ALL CHECKS COLUMN
         // TITLE column check
             $if($meta(title),
@@ -880,22 +945,50 @@
             ,
             $puts(kill,$add($get(kill),1))
             )
+        // PADDING check (Estimate padding based on bitrate vs length (INACCURATE) - cover size, assuming only 1 front cover)
+
+            // FRONT COVER info necessary (taken from previous section)
+            // TOTAL PADDING ESTIMATE
+            $puts(padding_total,
+            $div($sub(%filesize%,$mul(%bitrate%,%length_seconds_fp%,125)),1024)
+            )
+            // excess padding (total - cover size)
+            $puts(padding,
+            $sub($get(padding_total),$get(size))
+            )
+
+            $if($and(
+                $not(%PROCESSED%),
+                $greater(99,$get(padding))
+                ),
+                $ifgreater($get(padding),50,
+                    $puts(warning,$add($get(warning),1)),
+                    $puts(kill,$add($get(kill),1))
+                )
+            )
 
         // YEAR TAG CHECK
 
-            $if($and($meta(year),$longer($meta(year),123),$longer(12345,$meta(year)),$greater($meta(year),1)),
+            $if($meta(year),
+                $if($and($longer($meta(year),123),$longer(12345,$meta(year)),$greater($meta(year),1)),
                     $if(%ORIGINAL RELEASE DATE%,
                         $ifequal($meta(year),$left(%ORIGINAL RELEASE DATE%,4),
                             ,
-                            $if(%RECORDING DATE%,
-                                $ifequal($meta(year),$left(%RECORDING DATE%,4),
-                                    ,
-                                    $puts(kill,$add($get(kill),1))
-                                ),
                             $puts(kill,$add($get(kill),1))
-                            )
                         ),
+                        $if(%RECORDING DATE%,
+                            $ifequal($meta(year),$left(%RECORDING DATE%,4),
+                                ,
+                                $puts(kill,$add($get(kill),1))
+                            ),
+                            $ifequal($meta(year),$left(%DATE%,4),
+                                ,
+                                $puts(kill,$add($get(kill),1))
+                            )
+                        )
                     ),
+                    $puts(kill,$add($get(kill),1))
+                ),
                 $puts(kill,$add($get(kill),1))
             )
 
