@@ -12,7 +12,8 @@ $directoriesToCheck = @(
     "D:\Radio\genre-based\electro\electroswing\",
 	"D:\Radio\genre-based\electro\EDM\all\",
 	"D:\Radio\genre-based\electro\trance\",
-	"D:\Radio\genre-based\electro\house\all\"
+	"D:\Radio\genre-based\electro\house\all\",
+    "D:\Radio\genre-based\electro\psybient & tribal\"
 	#"D:\Radio\genre-based\",
 	#"D:\Radio\region-based\",
 	#"D:\Radio\decades\",
