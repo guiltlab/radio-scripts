@@ -240,7 +240,9 @@ function findMismatchPlaylistFolder(index) {
 buttons.update = function () {
     var x = ((panel.w - bs * 4) / 2);
     var y = Math.round((panel.h - bs) / 2);
-    this.buttons.importPlaybackStatistics = new _button(x, y, bs, bs, { char: chars.folder, colour: colours.buttons }, null, function () { fb.RunMainMenuCommand("Library/Playback Statistics/Import Statistics..."); }, 'Import Playback Stats');
+    this.buttons.importPlaybackStatistics = new _button(x, y, bs, bs, { char: chars.folder, colour: colours.buttons }, null, function () {
+        fb.RunMainMenuCommand("Library/Playback Statistics/Import Statistics...");
+    }, 'Import Playback Stats');
     this.buttons.hardlinkAllPlaylists = new _button(x + (bs * 1), y, bs, bs, { char: chars.shuffle, colour: colours.buttons }, null, function () {
 
         // Start processing the first playlist
