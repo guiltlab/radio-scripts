@@ -13,7 +13,9 @@ $directoriesToCheck = @(
 	"D:\Radio\genre-based\electro\EDM\all\",
 	"D:\Radio\genre-based\electro\trance\",
 	"D:\Radio\genre-based\electro\house\all\",
-    "D:\Radio\genre-based\electro\psybient & tribal\"
+    "D:\Radio\genre-based\electro\psybient & tribal\",
+    "D:\Radio\genre-based\funk\all\",
+    "D:\Radio\genre-based\funk\disco\"
 	#"D:\Radio\genre-based\",
 	#"D:\Radio\region-based\",
 	#"D:\Radio\decades\",
@@ -38,6 +40,7 @@ $filesToDelete = @()
 
 # Check each file in the specified directories
 foreach ($dir in $directoriesToCheck) {
+    Write-Host "processing" $dir
     $files = Get-ChildItem -Recurse -File -Path $dir
     foreach ($file in $files) {
         $fileHardlinks = Get-HardlinkList -filePath $file.FullName
