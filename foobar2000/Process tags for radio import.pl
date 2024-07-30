@@ -333,6 +333,21 @@
                 )
             )
 
+// GROUPING script
+    // highlight missing album artist
+    $if($or(
+            $and(
+                $stricmp($meta(album artist), %artist%),
+                $strchr(%artist%,&)
+            ),
+            $not($meta(album artist))
+        ),$puts(kill,1)
+    )
+    $if($get(kill),$put(color,$rgb(222,33,71)))
+    $if2(%album artist%,<no artist>)
+    $rgb()
+    [ / %album%][ '('%date%')']
+
 // COLUMNS CHECK
     // TRACKNUMBER column
 
