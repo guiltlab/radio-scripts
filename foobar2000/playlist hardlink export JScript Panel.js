@@ -241,6 +241,9 @@ buttons.update = function () {
     var x = ((panel.w - bs * 4) / 2);
     var y = Math.round((panel.h - bs) / 2);
     this.buttons.importPlaybackStatistics = new _button(x, y, bs, bs, { char: chars.folder, colour: colours.buttons }, null, function () {
+        // workaround to copy path to Playback Stats in clipboard - would be better to open dialog box directly in it
+        var importPlaybackStatsPath = "D:\\foobar2000\\backup";
+        utils.SetClipboardText(importPlaybackStatsPath);
         fb.RunMainMenuCommand("Library/Playback Statistics/Import Statistics...");
     }, 'Import Playback Stats');
     this.buttons.hardlinkAllPlaylists = new _button(x + (bs * 1), y, bs, bs, { char: chars.shuffle, colour: colours.buttons }, null, function () {
