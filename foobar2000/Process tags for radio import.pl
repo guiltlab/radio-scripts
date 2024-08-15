@@ -665,22 +665,35 @@
                     $strstr($lower([%album%]),disc),
                     $strstr($lower([%album%]),disk),
                     $strstr($lower([%album%]),reissue),
-                    $strstr($lower([%album%]),reissue),
+                    $strstr($lower([%album%]),deluxe),
+                    $strstr($lower([%album%]),platinum),
+                    $strstr($lower([%album%]),edition),
+                    $strstr($lower([%album%]),limited),
+                    $strstr($lower([%album%]),vinyl),
                     $strstr($lower([%album%]),'['),
                     $strstr($lower([%album%]),']'),
                     $strstr($lower([%album%]),'{'),
                     $strstr($lower([%album%]),'}')
                 ),
-                $rgb(222,33,71)[%album%],
+                $puts(warning,1),
                 $if($or(
                     $strstr($lower([%album%]),'('),
                     $strstr($lower([%album%]),')')
                     ),
-                    $rgb(249,213,6)[%album%],
+                    $puts(kill,1),
                     [%album%]
                     )
                 ),
-            $rgb(222,33,71)MISSING
+            $puts(missing,1)
+        )
+        $if($get(missing),
+        $rgb(222,33,71)MISSING)
+
+        $if($get(warning),
+        $rgb(222,33,71)[%album%],
+        )
+        $if($get(kill),
+        $rgb(249,213,6)[%album%]
         )
 
     // COVER COLUMN check
