@@ -726,10 +726,10 @@
                         $greater($get(bytes),200000),
                         $greater($max($get(height),$get(width)),600)
                     ),
-                    '| '$rgb(249,213,6)$get(size)
+                    ' | '$rgb(249,213,6)$get(size)
                     $rgb(),
                     $if($get(size),
-                        '| '$get(size)
+                        ' | '$get(size)
                     )
                 )
             )
@@ -951,14 +951,14 @@
             )
 
             $ifgreater(1,$len($get(size)),
-            $puts(kill,$add($get(kill),1)),
+            $puts(coverKill,$add($get(coverKill),1)),
             $ifgreater(500,$max($get(height),$get(width)),
-            $puts(kill,$add($get(kill),1)),
+            $puts(coverKill,$add($get(coverKill),1)),
             )
             )
 
             $ifgreater($get(bytes),300000,
-            $puts(kill,$add($get(kill),1)),
+            $puts(coverKill,$add($get(coverKill),1)),
             )
 
 
@@ -971,8 +971,20 @@
 
             $ifequal($stricmp($get(format),JPEG),1,
             ,
-            $puts(kill,$add($get(kill),1))
+            $puts(coverKill,$add($get(coverKill),1))
             )
+            
+            $if($and(
+                %BAD COVER%,
+                $greater($get(coverKill),0)
+                ),
+                $puts(coverKill($sub($get(coverKill,1))))
+            )
+
+            $ifgreater($get(coverKill),0,
+            $puts(kill,$add($get(kill),$get(coverKill1))),
+            )
+
         // PADDING check (Estimate padding based on bitrate vs length (INACCURATE) - cover size, assuming only 1 front cover)
 
             // FRONT COVER info necessary (taken from previous section)

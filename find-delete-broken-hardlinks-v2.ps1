@@ -6,20 +6,10 @@
 $directoriesToCheck = @(
     "D:\Radio\new\",
 	"D:\Radio\soundtracks\",
-    "D:\Radio\genre-based\electro\",
-	#"D:\Radio\genre-based\electro\dnb\",
-	#"D:\Radio\genre-based\electro\synthwave\",
-	#"D:\Radio\genre-based\electro\chiptune\",
-    #"D:\Radio\genre-based\electro\electroswing\",
-	#"D:\Radio\genre-based\electro\EDM\all\",
-	#"D:\Radio\genre-based\electro\trance\",
-	#"D:\Radio\genre-based\electro\house\all\",
-    #"D:\Radio\genre-based\electro\psybient & tribal\",
-    "D:\Radio\genre-based\funk\"
-	#"D:\Radio\genre-based\",
-	#"D:\Radio\region-based\",
+	"D:\Radio\genre-based\",
+	"D:\Radio\region-based\"
 	#"D:\Radio\decades\",
-	#"D:\Radio\everything-except-OST\"
+	"D:\Radio\everything-except-OST\"
 )
 
 # Define the reference directory
