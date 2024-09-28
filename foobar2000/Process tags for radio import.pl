@@ -911,6 +911,38 @@
         $rgb(222,33,71)$get(padding) KB
         )
         )
+    // RATING check
+        $puts(string,
+        $if($and($meta(rating),$not($strstr($lower($meta(rating)),clean)),$not($strstr($lower($meta(rating)),explicit))
+        ),
+        $ifequal($meta(rating),0,
+        ZERO★,
+        $ifequal($meta(rating),1,
+        1★,
+        $ifequal($meta(rating),2,
+        $rgb(222,33,71)2★,
+        $ifequal($meta(rating),3,
+        3★,
+        $ifequal($meta(rating),4,
+        4★,
+        $ifequal($meta(rating),5,
+        $rgb(0,166,0)5★,
+        ☆☆☆☆☆)
+        )
+        )
+        )
+        )
+        ),
+        %rating_stars% 
+        )
+        )
+
+        $if($strstr(%path%,HEYLISTEN),
+        $rgb(255,255,255)$get(string),
+        $rgb(255,155,0)$get(string)
+        )
+
+
     // ALL CHECKS COLUMN
         // TITLE column check
             $if($meta(title),
