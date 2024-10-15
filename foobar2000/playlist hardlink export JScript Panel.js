@@ -119,6 +119,7 @@ var hardlinkTo = "File Operations/Link to/";
 var preset = null;
 var report = "";
 var report_good = "";
+var report_other = "";
 
 // send key to press "Run" on preview dialog box
 var shell = new ActiveXObject("WScript.Shell");
@@ -177,11 +178,12 @@ function findMismatchPlaylistFolder(index) {
 
     if (index >= playlists.length) {
         console.log("All playlists analyzed");
-        var message = "Playlists analyzed:\n" + report + "\n\n" + "All Good:\n" + report_good;
+        var message = "Issues found in these playlists:\n" + report + "\n\n" + "No corresponding API match:\n" + report_other + "\n\n" + "All Good:\n" + report_good;
         var title = window.Name + " " + "Report";
         utils.ShowPopupMessage(message, title);
         report = "";
         report_good = "";
+        report_other = "";
         return; // Exit when all playlists are processed
     }
 
@@ -228,7 +230,21 @@ function findMismatchPlaylistFolder(index) {
     itemCountPlaylistFolder = plman.GetPlaylistItemCount(playlistFolderIndex);
 
     if (itemCountUI - itemCountAPI !== 0 || itemCountPlaylistFolder - itemCountUI !== itemCountUI) {
+        if (!itemCountAPI) {
+            // handle unfinished playlists not yet used on the live radio
+            report_other = report_other.concat("\n", playlist.name, ": ", itemCountUI, " | Folder+fb2k: ", itemCountPlaylistFolder);
+        } else if (playlist.name == "chiptune" || playlist.name == "synthwave" || playlist.name == "drum & bass" || playlist.name == "jungle" || playlist.name == "dubstep" || playlist.name == "movies" || playlist.name == "TV") {
+            // handle playlists with known API mismatch (e.g. combined playlists on radio but single on foobar)
+            if (itemCountPlaylistFolder - itemCountUI !== itemCountUI) {
+                // folder different from playlist => check needed
+                report = report.concat("\n", playlist.name, ": ", itemCountUI, " | Folder+fb2k: ", itemCountPlaylistFolder, " | API: ", itemCountAPI);
+            } else {
+                // folder identical to playlist => OK
+                report_good = report_good.concat("\n", playlist.name, ": ", itemCountUI, " | Folder+fb2k: ", itemCountPlaylistFolder, " | API: ", itemCountAPI);
+            }
+        } else {
         report = report.concat("\n", playlist.name, ": ", itemCountUI, " | Folder+fb2k: ", itemCountPlaylistFolder, " | API: ", itemCountAPI);
+        }
     } else if (itemCountUI - itemCountAPI == 0 || itemCountPlaylistFolder - itemCountUI == itemCountUI) {
         report_good = report_good.concat("\n", playlist.name, ": ", itemCountUI, " | Folder+fb2k: ", itemCountPlaylistFolder, " | API: ", itemCountAPI);
     } else {
