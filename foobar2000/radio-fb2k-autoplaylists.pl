@@ -182,7 +182,18 @@
                 %PLAYLIST% HAS modern funk 
                 AND NOT 
                 EXCLUDE HAS modern funk
-
+    // rock
+        // stoner, space rock, heavy psych...
+            %path% HAS D:\Radio\everything\ 
+            AND (
+                %genre% HAS stoner 
+                OR %genre% HAS space 
+                OR %genre% HAS heavy blues 
+                OR %genre% HAS heavy psych
+            ) 
+            AND NOT genre IS sludge metal 
+            AND NOT PLAYLIST HAS endless 
+            AND NOT PLAYLIST HAS live jam
     // region-based and language-based
         // francophonie
             %path% HAS R:\Radio 
