@@ -175,7 +175,7 @@ function hardlinkPlaylists(index) {
 // Check if foobar playlist + hardlinked folder have same number of items, 
 // if not => it should be investigated e.g. using reFacets item#
 function findMismatchPlaylistFolder(index) {
-
+    
     if (index >= playlists.length) {
         console.log("All playlists analyzed");
         var message = "Issues found in these playlists:\n" + report + "\n\n" + "No corresponding API match:\n" + report_other + "\n\n" + "All Good:\n" + report_good;
@@ -266,10 +266,12 @@ buttons.update = function () {
 
         // Start processing the first playlist
         loadPlaylistManagerJSON();
+        console.log(window.Name + ": Begin hardlinkPlaylists");
         hardlinkPlaylists(0);
     }, 'Switch to playlist and hardlink');
     this.buttons.play = new _button(x + (bs * 2), y, bs, bs, { char: chars.play, colour: !fb.IsPlaying || fb.IsPaused ? colours.buttons : colours.sac }, null, function () {
         loadPlaylistManagerJSON();
+        console.log(window.Name + ": Begin radio playlist/folder/API mismatch analysis");
         findMismatchPlaylistFolder(0);
     }, "Check for mismatch (fb2k/folder/API)");
     this.buttons.checkBrokenHardlinks = new _button(x + (bs * 3), y, bs, bs, { char: chars.search, colour: colours.buttons }, null, function () {
