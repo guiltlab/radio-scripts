@@ -350,7 +350,24 @@
 
 // COLUMNS CHECK
     // TRACKNUMBER column
-
+        // check for unwanted characters, check if tracknumber is actually a number...
+        $if($or(
+                $not(%tracknumber%),
+                $greater($len([%tracknumber%]),3),
+                $strchr(%tracknumber%,/),
+                $strchr(%tracknumber%,*),
+                $strchr(%tracknumber%,_),
+                $strchr(%tracknumber%,-),
+                $strchr(%tracknumber%,\),
+                $strchr(%tracknumber%,=),
+                $strchr(%tracknumber%,.),
+                $strchr(%tracknumber%,;),
+                $not($strstr(%tracknumber%,$ascii($ansi(%tracknumber%)))),
+                $not($greater($add(%tracknumber%,1),1))
+            ),
+            $rgb(222,33,71)[%tracknumber%],
+            [%tracknumber%]
+        )
 
     // TITLE column check
         $if($meta(title),
@@ -361,6 +378,7 @@
                     $strstr($lower(%title%),'featuring'),
                     $strstr($lower(%title%),'ft.'),
                     $strstr($lower(%title%),'(ft'),
+                    $stricmp('_',$cut(%filename%,1)),
                     $ifgreater(
                         $len($replace($lower(%title%),remix,)),
                         $sub($len(%title%),5)
@@ -944,6 +962,11 @@
 
 
     // ALL CHECKS COLUMN
+        // FILENAME check
+            // if filename starts with _ ==> problem
+            $if($stricmp('_',$cut(%filename%,1)),
+            $puts(kill,$add($get(kill),1))
+            )
         // TITLE column check
             $if($meta(title),
                 $if($or(
