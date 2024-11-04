@@ -76,6 +76,66 @@
             AND 
             %genre% HAS desert blues
 
+    // electronic
+        // house
+            %path% HAS D:\Radio\everything\ AND (
+                %genre% HAS idm 
+                OR (
+                    %genre% HAS breakbeat 
+                    AND NOT (%genre% HAS house OR %genre% HAS beats)
+                ) 
+                OR 
+                %genre% HAS gqom 
+                OR 
+                %genre% HAS club freestyle 
+                OR 
+                %genre% HAS breaks 
+                OR 
+                %genre% HAS breakcore 
+                OR 
+                %genre% HAS techno 
+                OR 
+                %genre% HAS hardtek 
+                OR 
+                %genre% HAS tech house 
+                OR 
+                %genre% HAS "electro house" 
+                OR (
+                    %genre% HAS "uk garage" AND NOT %genre% HAS drum bass
+                ) OR (
+                    %genre% HAS "uk bass" AND NOT %genre% HAS drum bass
+                ) OR (
+                    %genre% HAS progressive AND (%genre% HAS house OR %genre% HAS trance)
+                ) OR (
+                    (%genre% HAS hardcore OR %genre% HAS acid OR %genre% HAS hard) 
+                    AND 
+                    %genre% HAS electro
+                )
+            ) 
+            AND NOT 
+            %genre% HAS hip hop 
+            AND NOT 
+            %genre% HAS "acid jazz" 
+            AND NOT 
+            %genre% HAS "acid rock" 
+            AND NOT 
+            %genre% HAS swing 
+            AND NOT 
+            %genre% HAS downtempo 
+            AND NOT 
+            %genre% HAS ambient 
+            AND NOT 
+            PLAYLIST HAS not idm 
+            AND NOT 
+            %genre% HAS trip hop 
+            AND NOT 
+            PLAYLIST HAS jungle 
+            AND NOT 
+            genre HAS drum bass 
+            AND NOT (
+                PLAYLIST HAS house AND NOT PLAYLIST HAS techno
+            )
+
     // country & bluegrass
         %path% HAS R:\Radio 
         AND (
@@ -194,6 +254,31 @@
             AND NOT genre IS sludge metal 
             AND NOT PLAYLIST HAS endless 
             AND NOT PLAYLIST HAS live jam
+    // Pop
+        // general pop music < 8 mn
+            %path% HAS D:\Radio\everything\ AND (
+                (%genre% HAS electro AND %genre% HAS pop) 
+                OR 
+                %genre% HAS synthpop 
+                OR 
+                %genre% HAS synth pop 
+                OR 
+                %genre% HAS art pop 
+                OR 
+                %genre% HAS dream pop 
+                OR 
+                %genre% HAS dance pop 
+                OR (%genre% HAS "indie pop" AND NOT %genre% HAS "indie rock") 
+                OR (%genre% HAS pop AND %genre% HAS r&b)
+            ) 
+            AND NOT 
+            %length% GREATER 480 
+            AND NOT (
+                genre IS trip hop AND NOT genre IS art pop
+                ) 
+            AND NOT 
+            EXCLUDE HAS pop
+
     // region-based and language-based
         // francophonie
             %path% HAS R:\Radio 
