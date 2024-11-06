@@ -693,12 +693,13 @@
                     $strstr($lower([%album%]),'{'),
                     $strstr($lower([%album%]),'}')
                 ),
-                $puts(warning,1),
+                $puts(kill,1),
                 $if($or(
                     $strstr($lower([%album%]),'('),
-                    $strstr($lower([%album%]),')')
+                    $strstr($lower([%album%]),')'),
+                    $strstr($lower([%album%]),'"')
                     ),
-                    $puts(kill,1),
+                    $puts(warning,1),
                     [%album%]
                     )
                 ),
@@ -707,10 +708,10 @@
         $if($get(missing),
         $rgb(222,33,71)MISSING)
 
-        $if($get(warning),
+        $if($get(kill),
         $rgb(222,33,71)[%album%],
         )
-        $if($get(kill),
+        $if($get(warning),
         $rgb(249,213,6)[%album%]
         )
 
