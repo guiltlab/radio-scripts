@@ -84,7 +84,7 @@ function getRadioPlaylistsJSON(url) {
         var now = utils.Now();
     }
 
-    if (radioPlaylists && now - lastUpdatedTimestamp < 86400) {
+    if (radioPlaylists && now - lastUpdatedTimestamp < 21600) {
         // use alrady loaded info from local file
         console.log(window.Name + ": Using local JSON for radio playlists");
     } else if (apiKey) {
