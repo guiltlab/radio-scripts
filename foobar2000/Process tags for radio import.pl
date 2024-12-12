@@ -611,9 +611,9 @@
         )
         
     // YEAR COLUMN check
-        // check if YEAR > 1 ==> if not then YEAR is not a number
+        // check if YEAR > 1500 ==> if not then YEAR is not a number or too small
         $if($meta(year),
-            $if($and($longer($meta(year),123),$longer(12345,$meta(year)),$greater($meta(year),1)),
+            $if($and($longer($meta(year),123),$longer(12345,$meta(year)),$greater($meta(year),1500)),
                     $if(%ORIGINAL RELEASE DATE%,
                         $ifequal($meta(year),$left(%ORIGINAL RELEASE DATE%,4),
                             $meta(year),
