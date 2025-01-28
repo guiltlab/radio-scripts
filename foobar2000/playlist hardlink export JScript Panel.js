@@ -47,13 +47,55 @@ function loadPlaylistManagerJSON() {
 // get radio playlists from local file on panel load
 var radioPlaylists = null
 var playlistAPIPath = "..\\dev\\azuri-ndm\\src\\data\\playlists_API.json";
+var playlistAPIPathOld = "..\\dev\\azuri-ndm\\src\\data\\playlists_API_old.json";
+var playlistAPIPathBackup = "..\\dev\\azuri-ndm\\src\\data\\playlists_API_backup.json";
+var file_radio = null;
+var json_radio = null;
+var backupMode = null;
 if (utils.IsFile(playlistAPIPath)) {
-    var file_radio = fso.OpenTextFile(playlistAPIPath, 1);
-    var json_radio = file_radio.ReadAll();
+    file_radio = fso.OpenTextFile(playlistAPIPath, 1);
+    json_radio = file_radio.ReadAll();
     file_radio.Close();
-    radioPlaylists = JSON.parse(json_radio);
-} else {
-    console.log("Local JSON not found, initiating API call to retrieve radio playlists data");
+    try {
+        radioPlaylists = JSON.parse(json_radio);
+    } catch (error) {
+        console.log(window.Name, ": " + error + " | Error using latest API JSON, switching to old one");
+        playlistAPIPath = playlistAPIPathOld;
+        backupMode = true;
+        try {
+            if (utils.IsFile(playlistAPIPath)) {
+                file_radio = fso.OpenTextFile(playlistAPIPath, 1);
+                json_radio = file_radio.ReadAll();
+                file_radio.Close();
+                radioPlaylists = JSON.parse(json_radio);
+
+            } else {
+                console.log(window.Name, ": " + error + " | Local JSON_old not found, falling back to JSON_backup");
+            }
+        } catch (error) {
+            console.log(window.Name, ": " + error + " | Error using old API JSON, switching to backup one");
+            playlistAPIPath = playlistAPIPathBackup;
+            try {
+                if (utils.IsFile(playlistAPIPath)) {
+                    file_radio = fso.OpenTextFile(playlistAPIPath, 1);
+                    json_radio = file_radio.ReadAll();
+                    file_radio.Close();
+                    radioPlaylists = JSON.parse(json_radio);
+                } else {
+                    console.log(window.Name, ": " + error + " | Local JSON_backup not found, no fallback");
+                }
+            }
+            catch (error) {
+                console.log(window.Name, ": " + error + " | New, old and backup API JSON failed!");
+
+            }
+        }
+
+    }
+
+}
+else {
+    console.log(window.Name, ": Local JSON not found, initiating API call to retrieve radio playlists data");
 }
 
 // Radio API information & headers
@@ -84,15 +126,16 @@ function getRadioPlaylistsJSON(url) {
         var now = utils.Now();
     }
 
-    if (radioPlaylists && now - lastUpdatedTimestamp < 21600) {
-        // use alrady loaded info from local file
+    if (radioPlaylists && (now - lastUpdatedTimestamp < 21600 || backupMode)) {
+        // use alrady loaded info from local file if local cache is recent or if backupMode activated (radio API down/malfunctioning)
         console.log(window.Name + ": Using local JSON for radio playlists");
     } else if (apiKey) {
         // refresh playlists JSON with API call
-        console.log("Local JSON too old, initiating API call to refresh radio playlists data");
+        console.log(window.Name, ": Local JSON too old, backup + initiating API call to refresh radio playlists data");
+        utils.CopyFile(playlistAPIPath, playlistAPIPathOld, true);
         utils.HTTPRequestAsync(window.ID, GET, url, headers);
     } else {
-        utils.ShowPopupMessage("API Key not found at " + apiKeyPath + " or regex match issue", window.Name + " Error");
+        utils.ShowPopupMessage(window.Name, ": API Key not found at " + apiKeyPath + " or regex match issue", window.Name + " Error");
     }
 }
 
@@ -129,7 +172,7 @@ function sendKey(key) {
 
 // function to hardlink fb2K playlists to folders with FileOps
 function hardlinkPlaylists(index) {
-    console.log("start hardlinkPlaylists");
+
     if (index >= playlists.length) {
         console.log("All playlists hardlinked");
         var message = "Playlists hardlinked:\n" + report;
@@ -175,10 +218,10 @@ function hardlinkPlaylists(index) {
 // Check if foobar playlist + hardlinked folder have same number of items, 
 // if not => it should be investigated e.g. using reFacets item#
 function findMismatchPlaylistFolder(index) {
-    
+
     if (index >= playlists.length) {
-        console.log("All playlists analyzed");
-        var message = "Issues found in these playlists:\n" + report + "\n\n" + "No corresponding API match:\n" + report_other + "\n\n" + "All Good:\n" + report_good;
+        console.log(window.Name + ": All playlists analyzed");
+        var message = "Issues found in these playlists:\n" + report + "\n\n//////////////////////////////////////////////////////////\n\n" + "No corresponding API match:\n" + report_other + "\n\n" + "All Good:\n" + report_good;
         var title = window.Name + " " + "Report";
         utils.ShowPopupMessage(message, title);
         report = "";
@@ -208,6 +251,7 @@ function findMismatchPlaylistFolder(index) {
     // cannot use find() because ECMA5 limit
     var itemCountAPI = null
     if (radioPlaylists) {
+
         for (var i = 0; i < radioPlaylists.length; i++) {
             if (radioPlaylists[i].id == playlist.idRadio) {
                 radioPlaylist = radioPlaylists[i];
@@ -243,7 +287,7 @@ function findMismatchPlaylistFolder(index) {
                 report_good = report_good.concat("\n", playlist.name, ": ", itemCountUI, " | Folder+fb2k: ", itemCountPlaylistFolder, " | API: ", itemCountAPI);
             }
         } else {
-        report = report.concat("\n", playlist.name, ": ", itemCountUI, " | Folder+fb2k: ", itemCountPlaylistFolder, " | API: ", itemCountAPI);
+            report = report.concat("\n", playlist.name, ": ", itemCountUI, " | Folder+fb2k: ", itemCountPlaylistFolder, " | API: ", itemCountAPI);
         }
     } else if (itemCountUI - itemCountAPI == 0 || itemCountPlaylistFolder - itemCountUI == itemCountUI) {
         report_good = report_good.concat("\n", playlist.name, ": ", itemCountUI, " | Folder+fb2k: ", itemCountPlaylistFolder, " | API: ", itemCountAPI);
