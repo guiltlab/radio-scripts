@@ -61,7 +61,6 @@ def get_md5(flac_path: str) -> bytes:
 
 def set_md5(flac_thing: mut_flac.FLAC):
     flac_thing.info.md5_signature = int.from_bytes(get_md5(flac_thing.filename), 'big')
-    flac_thing.tags.vendor = 'MD5 added'
     flac_thing.save()
     return flac_thing
 
