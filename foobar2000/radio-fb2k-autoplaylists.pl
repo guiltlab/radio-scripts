@@ -308,6 +308,70 @@
 
         // etc
 
+    // hip hop
+        // real hip hop
+            %path% HAS D:\Radio\everything\ AND (
+                (
+                    (
+                        %genre% HAS hip hop 
+                        OR %genre% HAS rap
+                        ) 
+                    AND NOT (
+                        %genre% HAS trap 
+                        AND %genre% HAS electronic
+                        ) 
+                    AND NOT %genre% HAS instrumental 
+                    AND NOT %genre% HAS trip hop 
+                    AND NOT %genre% HAS beats 
+                    AND NOT %genre% HAS r&b 
+                    AND NOT %genre% HAS soul 
+                    AND NOT %genre% HAS metal 
+                    AND NOT %genre% HAS pop 
+                    AND NOT %genre% HAS french 
+                    AND NOT %genre% HAS français 
+                    AND NOT %genre% HAS greek 
+                    AND NOT %genre% HAS italian 
+                    AND NOT %genre% HAS africa 
+                    AND NOT %genre% HAS finland 
+                    AND NOT LANGUAGE HAS japanese 
+                    AND NOT %genre% HAS swed 
+                    AND NOT %genre% HAS drum bass 
+                    AND NOT %genre% HAS norwegian 
+                    AND NOT %genre% HAS electro swing 
+                    AND NOT %genre% HAS "free jazz" 
+                    AND NOT genre IS latin funk 
+                    AND NOT genre HAS rock 
+                    AND NOT genre IS contemporary jazz
+                ) OR 
+                PLAYLIST HAS real hip hop
+            ) AND NOT (
+                EXCLUDE HAS "real hip hop"
+                OR
+                EXCLUDE IS "hip hop"
+            )
+        // old school hip hop
+            %path% HAS D:\Radio\everything\ AND (
+                %genre% HAS hip hop 
+                OR 
+                %genre% HAS rap
+            ) AND (
+                %date% BEFORE 2005 
+                OR PLAYLIST HAS old school hip hop
+            ) AND NOT %genre% HAS trip hop 
+            AND NOT %genre% HAS early 
+            AND NOT %genre% HAS beats 
+            AND NOT %genre% HAS indie rock 
+            AND NOT %genre% HAS metal 
+            AND NOT %genre% HAS pop 
+            AND NOT %genre% HAS french 
+            AND NOT %genre% HAS français 
+            AND NOT %genre% HAS africa 
+            AND NOT %genre% HAS greek 
+            AND NOT (
+                EXCLUDE HAS old school hip hop 
+                OR EXCLUDE IS "hip hop"
+            )
+            
     // Find errors & fix
         // genre issues (find tracks with non-standard genres)
                 // main query

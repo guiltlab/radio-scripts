@@ -717,15 +717,15 @@
 
     // COVER COLUMN check
 
-        $puts(size,[%front_cover_size%])
-        $puts(bytes,[%front_cover_bytes%])
-        $puts(format,[%front_cover_format%])
-        $puts(height,[%front_cover_height%])
-        $puts(width,[%front_cover_width%])
+        $puts(size,[%cover_utils_front_size%])
+        $puts(bytes,[%cover_utils_front_bytes%])
+        $puts(format,[%cover_utils_front_format%])
+        $puts(height,[%cover_utils_front_height%])
+        $puts(width,[%cover_utils_front_width%])
 
         $puts(coverres,
-        $ifequal($mod([%front_cover_height%],[%front_cover_width%]),0,
-            [%front_cover_width%]px,[%front_cover_width%]x[%front_cover_height%])
+        $ifequal($mod([%cover_utils_front_height%],[%cover_utils_front_width%]),0,
+            [%cover_utils_front_width%]px,[%cover_utils_front_width%]x[%cover_utils_front_height%])
         )
 
         $puts(coverstatus,
@@ -864,7 +864,14 @@
         $if($strstr(%path%,\soundtracks\),
         $puts(path_string,Soundtracks)
         )
+        $if($or(
+            $strstr(%path%,T:\Music\Library\),
+            ),
+            $puts(path_string,Library)
+            $puts(path_string_color,$rgb(245,245,245))
+        )
 
+        // build string: color + Drive letter + description
         $get(path_string_color)$cut(%path%,1): $get(path_string)
 
     // PADDING column
@@ -872,15 +879,15 @@
 
         // FRONT COVER CHECK
 
-        $puts(size,[%front_cover_size%])
-        $puts(bytes,[%front_cover_bytes%])
-        $puts(format,[%front_cover_format%])
-        $puts(height,[%front_cover_height%])
-        $puts(width,[%front_cover_width%])
+        $puts(size,[%cover_utils_front_size%])
+        $puts(bytes,[%cover_utils_front_bytes%])
+        $puts(format,[%cover_utils_front_format%])
+        $puts(height,[%cover_utils_front_height%])
+        $puts(width,[%cover_utils_front_width%])
 
         $puts(coverres,
-        $ifequal($mod([%front_cover_height%],[%front_cover_width%]),0,
-        [%front_cover_width%]px,[%front_cover_width%]x[%front_cover_height%])
+        $ifequal($mod([%cover_utils_front_height%],[%cover_utils_front_width%]),0,
+        [%cover_utils_front_width%]px,[%cover_utils_front_width%]x[%cover_utils_front_height%])
         )
 
         $puts(coverstatus,
@@ -995,15 +1002,15 @@
 
         // FRONT COVER CHECK
 
-            $puts(size,[%front_cover_size%])
-            $puts(bytes,[%front_cover_bytes%])
-            $puts(format,[%front_cover_format%])
-            $puts(height,[%front_cover_height%])
-            $puts(width,[%front_cover_width%])
+            $puts(size,[%cover_utils_front_size%])
+            $puts(bytes,[%cover_utils_front_bytes%])
+            $puts(format,[%cover_utils_front_format%])
+            $puts(height,[%cover_utils_front_height%])
+            $puts(width,[%cover_utils_front_width%])
 
             $puts(coverres,
-            $ifequal($mod([%front_cover_height%],[%front_cover_width%]),0,
-            [%front_cover_width%]px,[%front_cover_width%]x[%front_cover_width%])
+            $ifequal($mod([%cover_utils_front_height%],[%cover_utils_front_width%]),0,
+            [%cover_utils_front_width%]px,[%cover_utils_front_width%]x[%cover_utils_front_width%])
             )
 
             $ifgreater(1,$len($get(size)),
@@ -1295,3 +1302,4 @@
                 $rgb(0,166,0)
                 ' | Checked'
             )
+//
