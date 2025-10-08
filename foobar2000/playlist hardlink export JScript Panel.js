@@ -23,6 +23,16 @@ var panel = new _panel();
 var buttons = new _buttons();
 var bs = _scale(30);
 
+//////////// Tie function to File>JSP 3>Item idx main menu command/////////
+function on_main_menu(idx) {
+    if (idx === 1) {
+        propertiesCleanUp();
+    }
+    if (idx === 3) {
+        processFiles();
+    }
+}
+
 /////////// Load SMP-Playlist Manager JSON & Radio API JSON ////////
 
 // Load the filesystem object to read the JSON file
@@ -54,7 +64,9 @@ var json_radio = null;
 var backupMode = null;
 if (utils.IsFile(playlistAPIPath)) {
     file_radio = fso.OpenTextFile(playlistAPIPath, 1);
+    console.log("path is " + playlistAPIPath);
     json_radio = file_radio.ReadAll();
+    //console.log(json_radio);
     file_radio.Close();
     try {
         radioPlaylists = JSON.parse(json_radio);
@@ -292,7 +304,7 @@ function findMismatchPlaylistFolder(index) {
     } else if (itemCountUI - itemCountAPI == 0 || itemCountPlaylistFolder - itemCountUI == itemCountUI) {
         report_good = report_good.concat("\n", playlist.name, ": ", itemCountUI, " | Folder+fb2k: ", itemCountPlaylistFolder, " | API: ", itemCountAPI);
     } else {
-        console.log("wtf?");
+        console.log(window.Name + ": wtf?");
     }
     findMismatchPlaylistFolder(index + 1);
 }
@@ -381,3 +393,115 @@ function on_size() {
     panel.size();
     buttons.update();
 }
+
+// Workaround to use Properties dialog box > "Clean up" option automatically.
+var items = null;
+function propertiesCleanUp() {
+    if (!items) {
+        items = plman.GetPlaylistSelectedItems(plman.ActivePlaylist); // get selected items if null e.g. when calling the function on its own, outside processFiles()
+        console.log("propertiesCleanUp() : no items stored at call time, grabbing items again");
+    }
+    // Activate foobar2000 window — make sure it's in the foreground and reselect items
+    shell.AppActivate("foobar2000");
+    items.RunContextCommand("Properties");
+    //open the Properties window (Alt+Enter), select all fields, open context menu, go down 8 times to select+use "Clean up"
+    //shell.SendKeys("%{ENTER}");
+    shell.SendKeys("{DOWN}");
+    shell.SendKeys("^a");
+    shell.SendKeys("+{F10}");
+    for (var i = 0; i < 8; i++) {
+        shell.SendKeys("{DOWN}");
+    }
+    shell.SendKeys("{ENTER}");
+    shell.SendKeys("{ESCAPE}");
+    shell.SendKeys("{ENTER}");
+}
+// Function to process files with a bunch of operations. Badly coded so will crash if the number of commands is lower than the number of function calls
+function processFiles() {
+    items = plman.GetPlaylistSelectedItems(plman.ActivePlaylist);
+    if (items.Count < 1 || !items.Count) {
+        return utils.ShowPopupMessage("No tracks selected - aborting");
+    }
+    var commands = [
+        { name: "Tagging/Batch attach pictures", delay: 0 }, // call first to add a back cover to remove later after optimizing filesize (in order to set padding to fixed value : the size of the back cover in question)
+        { name: "Utilities/Optimize file layout + minimize file size", delay: 2000 + items.Count * 1000 },
+        { name: "Cover utils/Remove all except front", delay: 2000 + items.Count * 1000 }, // must be done AFTER file opti to keep some padding!
+        { name: "Cover utils/Scan for Cover Info", delay: 0 }, // no delay required because it doesn't modify files
+        { name: "ReplayGain/Scan per-file track gain", delay: 2000 + items.Count * 500 }, // slowish with upsampling true peak scan < 150ms/track  
+        { name: "BPM Analyser/Automatically analyse BPMs", delay: 2000 + items.Count * 2000 }, // very slow with good sample length > 4s/track
+        { name: "Tagging/Scripts/Process tags for Radio Import", delay: 2000 + items.Count * 5000 },
+        { name: "propertiesCleanUp()", delay: 2000 + items.Count * 50 } // short delay because tagging script is very fast
+    ];
+
+    window.setTimeout(function () {
+        if (!commands[0].name) {
+            return;
+        }
+        items.RunContextCommand(commands[0].name);
+        console.log("Running " + commands[0].name + " on " + items.Count + " items");
+
+        window.setTimeout(function () {
+            if (!commands[1].name) {
+                return;
+            }
+            items.RunContextCommand(commands[1].name);
+            console.log("Running " + commands[1].name + " on " + items.Count + " items");
+
+            window.setTimeout(function () {
+                if (!commands[2].name) {
+                    return;
+                }
+                items.RunContextCommand(commands[2].name);
+                console.log("Running " + commands[2].name + " on " + items.Count + " items");
+
+                window.setTimeout(function () {
+                    if (!commands[3].name) {
+                        return;
+                    }
+                    items.RunContextCommand(commands[3].name);
+                    console.log("Running " + commands[3].name + " on " + items.Count + " items");
+
+                    window.setTimeout(function () {
+                        if (!commands[4].name) {
+                            return;
+                        }
+                        items.RunContextCommand(commands[4].name);
+                        console.log("Running " + commands[4].name + " on " + items.Count + " items");
+
+                        window.setTimeout(function () {
+                            if (!commands[5].name) {
+                                return;
+                            }
+                            items.RunContextCommand(commands[5].name);
+                            console.log("Running " + commands[5].name + " on " + items.Count + " items");
+
+                            window.setTimeout(function () {
+                                if (!commands[6].name) {
+                                    return;
+                                }
+                                items.RunContextCommand(commands[6].name);
+                                console.log("Running " + commands[6].name + " on " + items.Count + " items");
+
+                                window.setTimeout(function () {
+                                    //commands[7].name;
+                                    propertiesCleanUp();
+                                    console.log("Running " + commands[7].name + " on " + items.Count + " items");
+                                }, commands[7].delay);
+
+                            }, commands[6].delay);
+
+                        }, commands[5].delay);
+
+                    }, commands[4].delay);
+
+                }, commands[3].delay);
+
+            }, commands[2].delay);
+        }, commands[1].delay);
+    }, commands[0].delay);
+}
+
+// RG : ~2000x, took <25sec for 196 tracks => < 150m s/track reduce GREATLY
+//BPM: A LOT LONGER => finished @ 17:08 around 4 sec per track, increase to 5 ?
+//tagging script: very fast, reduce greatly
+//last step try to reselect tracks? 41 ->
