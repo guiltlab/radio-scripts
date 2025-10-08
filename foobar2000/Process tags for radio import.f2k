@@ -1,6 +1,7 @@
-// NOT actually perl, only for display formatting reasons
+// This fb2k script is for use with Masstagger component (part 1 - see .mts file for direct import)
+// The second part is the Columns UI config, set in Preferences > Columns UI > Playlist View > Columns > Display Script
 
-// SCRIPT
+// Masstagger script
     // TRACKNUMBER: check format and fix if necessary (output: 2 digits with leading zero if applicable)
         // one-liner
         $trim($if([%tracknumber%],$iflonger([%tracknumber%],2,$if($puts(truncate_position,$strchr([%tracknumber%],/)),$cut([%tracknumber%],$sub($get(truncate_position),1)),[%tracknumber%]),[%tracknumber%])))
@@ -333,7 +334,7 @@
                 )
             )
 
-// GROUPING script
+// Columns UI GROUPING script
     // highlight missing album artist
     $if($or(
             $and(
@@ -348,7 +349,68 @@
     $rgb()
     [ / %album%][ '('%date%')']
 
-// COLUMNS CHECK
+// Columns UI Display scripts (COLUMNS CHECK)
+    // GLOBALS
+        // these variables are reused across other columns/script sections
+        $set_global(size,[%cover_utils_front_size%])
+        $set_global(bytes,[%cover_utils_front_bytes%])
+        $set_global(format,[%cover_utils_front_format%])
+        $set_global(height,[%cover_utils_front_height%])
+        $set_global(width,[%cover_utils_front_width%])
+
+        $set_global(coverres,
+        $ifequal($mod([%cover_utils_front_height%],[%cover_utils_front_width%]),0,
+        [%cover_utils_front_width%]px,[%cover_utils_front_width%]x[%cover_utils_front_height%])
+        )
+
+        $puts(coverres,
+        $ifequal($mod([%cover_utils_front_height%],[%cover_utils_front_width%]),0,
+        [%cover_utils_front_width%]px,[%cover_utils_front_width%]x[%cover_utils_front_height%])
+        )
+
+        $set_global(coverstatus,
+        $ifgreater(1,$len([%cover_utils_front_size%]),
+        $rgb(222,33,71)MISSING,
+        $ifgreater(500,$max([%cover_utils_front_height%],[%cover_utils_front_width%]),
+        $rgb(222,33,71)$get(coverres)
+        $rgb(),
+        $get(coverres)
+        )
+        )
+        $ifgreater([%cover_utils_front_bytes%],300000,
+        | $rgb(222,33,71)[%cover_utils_front_size%]
+        $rgb(),
+        $if($and($greater([%cover_utils_front_bytes%],200000),
+        $greater($max([%cover_utils_front_height%],[%cover_utils_front_width%]),600)
+        ),
+        | $rgb(249,213,6)[%cover_utils_front_size%]
+        $rgb(),
+        $if([%cover_utils_front_size%],
+        | [%cover_utils_front_size%]
+        )
+        )
+        )
+
+        $ifequal($stricmp([%cover_utils_front_format%],JPEG),1,
+        ,
+        $rgb(255,249,0)[%cover_utils_front_format%]$rgb()
+        )
+
+        )
+
+        // UNUSED CURRENTLY
+        // Text
+        $set_global(color.txt.single,$rgb(0,0,0))
+        $set_global(color.txt.album,$rgb(0,0,0))
+        $set_global(color.txt.playing,$rgb(50,130,180))
+        $set_global(color.txt.selected,$rgb(255,155,0))
+
+        // Backgrounds
+        $set_global(color.bg.single,$rgb(166,202,240))
+        $set_global(color.bg.album,$rgb(140,186,236))
+        $set_global(color.bg.playing,$rgb(58,110,165))
+        $set_global(color.bg.selected,$rgb(10,36,106))
+
     // TRACKNUMBER column
         // check for unwanted characters, check if tracknumber is actually a number...
         $if($or(
@@ -716,50 +778,7 @@
         )
 
     // COVER COLUMN check
-
-        $puts(size,[%cover_utils_front_size%])
-        $puts(bytes,[%cover_utils_front_bytes%])
-        $puts(format,[%cover_utils_front_format%])
-        $puts(height,[%cover_utils_front_height%])
-        $puts(width,[%cover_utils_front_width%])
-
-        $puts(coverres,
-        $ifequal($mod([%cover_utils_front_height%],[%cover_utils_front_width%]),0,
-            [%cover_utils_front_width%]px,[%cover_utils_front_width%]x[%cover_utils_front_height%])
-        )
-
-        $puts(coverstatus,
-            $ifgreater(1,$len($get(size)),
-                $rgb(222,33,71)MISSING,
-                $ifgreater(500,$max($get(height),$get(width)),
-                    $rgb(222,33,71)$get(coverres)
-                    $rgb(),
-                    $get(coverres)
-                )
-            )
-
-            $ifgreater($get(bytes),300000,
-                ' | '$rgb(222,33,71)$get(size)
-                $rgb(),
-                $if($and(
-                        $greater($get(bytes),200000),
-                        $greater($max($get(height),$get(width)),600)
-                    ),
-                    ' | '$rgb(249,213,6)$get(size)
-                    $rgb(),
-                    $if($get(size),
-                        ' | '$get(size)
-                    )
-                )
-            )
-
-            $ifequal($stricmp($get(format),JPEG),1,
-            ,
-            $rgb(255,249,0)$get(format)$rgb()
-            )
-        )
-
-        $get(coverstatus)
+        $get_global(coverstatus)
 
     // FORMAT check
 
@@ -1001,38 +1020,26 @@
             )
 
         // FRONT COVER CHECK
-
-            $puts(size,[%cover_utils_front_size%])
-            $puts(bytes,[%cover_utils_front_bytes%])
-            $puts(format,[%cover_utils_front_format%])
-            $puts(height,[%cover_utils_front_height%])
-            $puts(width,[%cover_utils_front_width%])
-
-            $puts(coverres,
-            $ifequal($mod([%cover_utils_front_height%],[%cover_utils_front_width%]),0,
-            [%cover_utils_front_width%]px,[%cover_utils_front_width%]x[%cover_utils_front_width%])
-            )
-
-            $ifgreater(1,$len($get(size)),
+            $ifgreater(1,$len($get_global(size)),
             $puts(coverKill,$add($get(coverKill),1)),
-            $ifgreater(500,$max($get(height),$get(width)),
+            $ifgreater(500,$max($get_global(height),$get_global(width)),
             $puts(coverKill,$add($get(coverKill),1)),
             )
             )
 
-            $ifgreater($get(bytes),300000,
+            $ifgreater($get_global(bytes),300000,
             $puts(coverKill,$add($get(coverKill),1)),
             )
 
 
-            $if($and($greater($get(bytes),200000),
-            $greater($max($get(height),$get(width)),600)
+            $if($and($greater($get_global(bytes),200000),
+            $greater($max($get_global(height),$get_global(width)),600)
             ),
             $puts(warning,$add($get(warning),1)),
             )
 
 
-            $ifequal($stricmp($get(format),JPEG),1,
+            $ifequal($stricmp($get_global(format),JPEG),1,
             ,
             $puts(coverKill,$add($get(coverKill),1))
             )
@@ -1050,14 +1057,14 @@
 
         // PADDING check (Estimate padding based on bitrate vs length (INACCURATE) - cover size, assuming only 1 front cover)
 
-            // FRONT COVER info necessary (taken from previous section)
+            // FRONT COVER info necessary (taken from Global variables)
             // TOTAL PADDING ESTIMATE
             $puts(padding_total,
             $div($sub(%filesize%,$mul(%bitrate%,%length_seconds_fp%,125)),1024)
             )
             // excess padding (total - cover size)
             $puts(padding,
-            $sub($get(padding_total),$get(size))
+            $sub($get(padding_total),$get_global(size))
             )
 
             $if($and(
@@ -1302,4 +1309,4 @@
                 $rgb(0,166,0)
                 ' | Checked'
             )
-//
+
