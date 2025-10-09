@@ -28,6 +28,10 @@ function on_main_menu(idx) {
     if (idx === 1) {
         propertiesCleanUp();
     }
+    if (idx === 2) {
+        var lol = plman.GetPlaylistSelectedItems(plman.ActivePlaylist);
+        lol.RunContextCommand("Tagging/Scripts/Process tags for Radio Import");
+    }
     if (idx === 3) {
         processFiles();
     }
@@ -425,16 +429,19 @@ function processFiles() {
     var commands = [
         { name: "Tagging/Batch attach pictures", delay: 0 }, // call first to add a back cover to remove later after optimizing filesize (in order to set padding to fixed value : the size of the back cover in question)
         { name: "Utilities/Optimize file layout + minimize file size", delay: 2000 + items.Count * 1000 },
-        { name: "Cover utils/Remove all except front", delay: 2000 + items.Count * 1000 }, // must be done AFTER file opti to keep some padding!
+        { name: "Cover utils/Remove all except front", delay: 1000 + items.Count * 1000 }, // must be done AFTER file opti to keep some padding!
         { name: "Cover utils/Scan for Cover Info", delay: 0 }, // no delay required because it doesn't modify files
-        { name: "ReplayGain/Scan per-file track gain", delay: 2000 + items.Count * 500 }, // slowish with upsampling true peak scan < 150ms/track  
+        { name: "ReplayGain/Scan per-file track gain", delay: 1000 + items.Count * 500 }, // slowish with upsampling true peak scan < 150ms/track  
+        { name: "Utilities/Verify integrity", delay: 500 }, // short delay because it should(?) not block files with RG scan (block happens during bpm scan)
         { name: "BPM Analyser/Automatically analyse BPMs", delay: 2000 + items.Count * 2000 }, // very slow with good sample length > 4s/track
-        { name: "Tagging/Scripts/Process tags for Radio Import", delay: 2000 + items.Count * 5000 },
-        { name: "propertiesCleanUp()", delay: 2000 + items.Count * 50 } // short delay because tagging script is very fast
+        { name: "Tagging/Scripts/Process tags for Radio Import", delay: 1000 + items.Count * 5000 },
+        //{ name: "Tagging/Scripts/Processed", delay: 1000 + items.Count * 50 }, // short delay because tagging scripts are very fast
+        { name: "propertiesCleanUp()", delay: 1000 + items.Count * 50 } // short delay because tagging scripts are very fast
     ];
 
     window.setTimeout(function () {
         if (!commands[0].name) {
+            console.log(window.Name + ": command not found, aborting.")
             return;
         }
         items.RunContextCommand(commands[0].name);
@@ -442,6 +449,7 @@ function processFiles() {
 
         window.setTimeout(function () {
             if (!commands[1].name) {
+                console.log(window.Name + ": command not found, aborting.")
                 return;
             }
             items.RunContextCommand(commands[1].name);
@@ -449,6 +457,7 @@ function processFiles() {
 
             window.setTimeout(function () {
                 if (!commands[2].name) {
+                    console.log(window.Name + ": command not found, aborting.")
                     return;
                 }
                 items.RunContextCommand(commands[2].name);
@@ -456,6 +465,7 @@ function processFiles() {
 
                 window.setTimeout(function () {
                     if (!commands[3].name) {
+                        console.log(window.Name + ": command not found, aborting.")
                         return;
                     }
                     items.RunContextCommand(commands[3].name);
@@ -463,6 +473,7 @@ function processFiles() {
 
                     window.setTimeout(function () {
                         if (!commands[4].name) {
+                            console.log(window.Name + ": command not found, aborting.")
                             return;
                         }
                         items.RunContextCommand(commands[4].name);
@@ -470,6 +481,7 @@ function processFiles() {
 
                         window.setTimeout(function () {
                             if (!commands[5].name) {
+                                console.log(window.Name + ": command not found, aborting.")
                                 return;
                             }
                             items.RunContextCommand(commands[5].name);
@@ -477,15 +489,30 @@ function processFiles() {
 
                             window.setTimeout(function () {
                                 if (!commands[6].name) {
+                                    console.log(window.Name + ": command not found, aborting.")
                                     return;
                                 }
                                 items.RunContextCommand(commands[6].name);
                                 console.log("Running " + commands[6].name + " on " + items.Count + " items");
 
                                 window.setTimeout(function () {
-                                    //commands[7].name;
-                                    propertiesCleanUp();
+                                    commands[7].name;
+                                    if (!commands[7].name) {
+                                        console.log(window.Name + ": command not found, aborting.")
+                                        return;
+                                    }
+                                    items.RunContextCommand(commands[7].name);
                                     console.log("Running " + commands[7].name + " on " + items.Count + " items");
+                                    window.setTimeout(function () {
+                                        if (!commands[8].name) {
+                                            console.log(window.Name + ": command not found, aborting.")
+                                            return;
+                                        }
+                                        //items.RunContextCommand(commands[8].name);
+                                        propertiesCleanUp();
+                                        console.log("Running " + commands[8].name + " on " + items.Count + " items");
+                                    }, commands[8].delay);
+
                                 }, commands[7].delay);
 
                             }, commands[6].delay);
@@ -500,8 +527,3 @@ function processFiles() {
         }, commands[1].delay);
     }, commands[0].delay);
 }
-
-// RG : ~2000x, took <25sec for 196 tracks => < 150m s/track reduce GREATLY
-//BPM: A LOT LONGER => finished @ 17:08 around 4 sec per track, increase to 5 ?
-//tagging script: very fast, reduce greatly
-//last step try to reselect tracks? 41 ->
