@@ -139,45 +139,81 @@
                     )
                 )
 
-    // ARTIST: Find "feat" and move artist to ARTIST field
+    // ARTIST: 
+        //ARTIST: Find "feat" and move artist to ARTIST field
 
-        // one-liner
-        $if($strstr($lower([%title%]),'('ft.),$puts(featuring,'('ft.)$puts(matchpos,$strstr($lower([%title%]),'('ft.)))$if($strstr($lower([%title%]),'('with),$puts(featuring,'('with)$puts(matchpos,$strstr($lower([%title%]),'('with)))$if($strstr($lower([%title%]),feat),$puts(featuring,feat)$puts(matchpos,$strstr($lower([%title%]),feat)))$if($strstr($lower([%title%]),feat.),$puts(featuring,feat.)$puts(matchpos,$strstr($lower([%title%]),feat.)))$if($strstr($lower([%title%]),'('feat.),$puts(featuring,'('feat.)$puts(matchpos,$strstr($lower([%title%]),'('feat.)))$if($strstr($lower([%title%]),featuring),$puts(featuring,featuring)$puts(matchpos,$strstr($lower([%title%]),featuring)))$if($strstr($lower([%title%]),'('featuring),$puts(featuring,'('featuring)$puts(matchpos,$strstr($lower([%title%]),'('featuring)))$if($get(matchpos),[%artist%;]$trim($replace($replace($substr(%title%,$get(matchpos),$len(%title%)),')',),$get(featuring),)),[%artist%])
+            // one-liner
+                $if($strstr($lower([%title%]),'('ft.),$puts(featuring,'('ft.)$puts(matchpos,$strstr($lower([%title%]),'('ft.)))$if($strstr($lower([%title%]),'('with),$puts(featuring,'('with)$puts(matchpos,$strstr($lower([%title%]),'('with)))$if($strstr($lower([%title%]),feat),$puts(featuring,feat)$puts(matchpos,$strstr($lower([%title%]),feat)))$if($strstr($lower([%title%]),feat.),$puts(featuring,feat.)$puts(matchpos,$strstr($lower([%title%]),feat.)))$if($strstr($lower([%title%]),'('feat.),$puts(featuring,'('feat.)$puts(matchpos,$strstr($lower([%title%]),'('feat.)))$if($strstr($lower([%title%]),featuring),$puts(featuring,featuring)$puts(matchpos,$strstr($lower([%title%]),featuring)))$if($strstr($lower([%title%]),'('featuring),$puts(featuring,'('featuring)$puts(matchpos,$strstr($lower([%title%]),'('featuring)))$if($get(matchpos),[%artist%;]$trim($replace($replace($substr(%title%,$get(matchpos),$len(%title%)),')',),$get(featuring),)),[%artist%])
 
-        // main code
-        $if($strstr($lower([%title%]),'('ft.),$puts(featuring,'('ft.)
-        $puts(matchpos,$strstr($lower([%title%]),'('ft.))
-        )
-        $if($strstr($lower([%title%]),'('with),$puts(featuring,'('with)
-        $puts(matchpos,$strstr($lower([%title%]),'('with))
-        )
-        $if($strstr($lower([%title%]),feat),$puts(featuring,feat)
-        $puts(matchpos,$strstr($lower([%title%]),feat))
-        )
-        $if($strstr($lower([%title%]),feat.),$puts(featuring,feat.)
-        $puts(matchpos,$strstr($lower([%title%]),feat.))
-        )
-        $if($strstr($lower([%title%]),'('feat.),$puts(featuring,'('feat.)
-        $puts(matchpos,$strstr($lower([%title%]),'('feat.))
-        )
-        $if($strstr($lower([%title%]),featuring),$puts(featuring,featuring)
-        $puts(matchpos,$strstr($lower([%title%]),featuring))
-        )
-        $if($strstr($lower([%title%]),'('featuring),$puts(featuring,'('featuring)
-        $puts(matchpos,$strstr($lower([%title%]),'('featuring))
-        )
+            // main code
+                $if($strstr($lower([%title%]),'('ft.),$puts(featuring,'('ft.)
+                $puts(matchpos,$strstr($lower([%title%]),'('ft.))
+                )
+                $if($strstr($lower([%title%]),'('with),$puts(featuring,'('with)
+                $puts(matchpos,$strstr($lower([%title%]),'('with))
+                )
+                $if($strstr($lower([%title%]),feat),$puts(featuring,feat)
+                $puts(matchpos,$strstr($lower([%title%]),feat))
+                )
+                $if($strstr($lower([%title%]),feat.),$puts(featuring,feat.)
+                $puts(matchpos,$strstr($lower([%title%]),feat.))
+                )
+                $if($strstr($lower([%title%]),'('feat.),$puts(featuring,'('feat.)
+                $puts(matchpos,$strstr($lower([%title%]),'('feat.))
+                )
+                $if($strstr($lower([%title%]),featuring),$puts(featuring,featuring)
+                $puts(matchpos,$strstr($lower([%title%]),featuring))
+                )
+                $if($strstr($lower([%title%]),'('featuring),$puts(featuring,'('featuring)
+                $puts(matchpos,$strstr($lower([%title%]),'('featuring))
+                )
 
-        $if($get(matchpos),
-        [%artist%;]
-        $trim(
-            $replace(
-                $replace(
-                    $substr(%title%,$get(matchpos),$len(%title%)),')',)
-                    ,$get(featuring),
+                $if($get(matchpos),
+                [%artist%;]
+                $trim(
+                    $replace(
+                        $replace(
+                            $substr(%title%,$get(matchpos),$len(%title%)),')',)
+                            ,$get(featuring),
+                            )
+                            ),
+                [%artist%]
+                )
+        //ARTIST: check if album artist is in artist, if yes check if at beginning and if not, move it there (does not work perfectly on multi value)
+            //one-liner
+                $ifgreater($strstr(%artist%,%album artist%),1,$insert($replace(%artist%,%album artist%,),%album artist%';',0),$ifgreater($strstr(%artist%,$meta(album artist,0)),1,$insert($replace(%artist%,$meta(album artist,0),),$meta(album artist,0)';',0),$ifgreater($strstr(%artist%,$meta(album artist,1)),1,$insert($replace(%artist%,$meta(album artist,1),),$meta(album artist,1)';',0),$ifgreater($strstr(%artist%,$meta(album artist,2)),1,$insert($replace(%artist%,$meta(album artist,2),),$meta(album artist,2)';',0),$ifgreater($strstr(%artist%,$meta(album artist,3)),1,$insert($replace(%artist%,$meta(album artist,3),),$meta(album artist,3)';',0),[%artist%])))))
+            // main code
+                $ifgreater($strstr(%artist%,%album artist%),1,
+                    $insert(
+                    $replace(%artist%,%album artist%,)
+                    ,%album artist%';',0)
+                    ,
+                    // if full string not present, test individual values
+                    $ifgreater($strstr(%artist%,$meta(album artist,0)),1,
+                        $insert(
+                        $replace(%artist%,$meta(album artist,0),)
+                        ,$meta(album artist,0)';',0)
+                        ,
+                        $ifgreater($strstr(%artist%,$meta(album artist,1)),1,
+                            $insert(
+                            $replace(%artist%,$meta(album artist,1),)
+                            ,$meta(album artist,1)';',0)
+                            ,
+                            $ifgreater($strstr(%artist%,$meta(album artist,2)),1,
+                                $insert(
+                                $replace(%artist%,$meta(album artist,2),)
+                                ,$meta(album artist,2)';',0)
+                                ,
+                                $ifgreater($strstr(%artist%,$meta(album artist,3)),1,
+                                    $insert(
+                                    $replace(%artist%,$meta(album artist,3),)
+                                    ,$meta(album artist,3)';',0)
+                                    ,[%artist%]
+                                    )
+                                )
+                            )
+                        )
                     )
-                    ),
-        [%artist%]
-        )
 
     // TITLE: Find "feat" and remove artist from TITLE
 
@@ -322,7 +358,7 @@
             $trim($ifequal($strstr($get(pls),';'),0,$replace($get(pls),';',),$get(pls)))      
    
     // YEAR: tag from ORIGINAL RELEASE DATE if possible, otherwise from RECORDING DATE, otherwise from DATE
-        // main code
+        // one-liner
             $if(%ORIGINAL RELEASE DATE%,$cut(%ORIGINAL RELEASE DATE%,4),$if(%RECORDING DATE%,$cut(%RECORDING DATE%,4),$cut([%date%],4)))
 
         // main code
@@ -333,6 +369,10 @@
                     $cut([%date%],4)
                 )
             )
+// check if album artist is present in artist, if yes try to move it to the beginning 
+$if($strstr(%album artist%,%artist%)
+$insert(%album artist%,%artist%,0))
+
 
 // Columns UI GROUPING script
     // highlight missing album artist
@@ -350,8 +390,22 @@
     [ / %album%][ '('%date%')']
 
 // Columns UI Display scripts (COLUMNS CHECK)
-    // GLOBALS
-        // these variables are reused across other columns/script sections
+    // GLOBALS: these variables are reused across other columns/script sections
+        // Warnings and checks globals
+            $set_global(status_missing,
+            $rgb(222,33,71)MISSING
+            )
+            $set_global(status_KO_color,
+            $rgb(222,33,71)$get(kill)CHECK'('S')' KO
+            )
+            $set_global(status_KO,
+            CHECK'('S')' KO
+            )
+            $set_global(status_warning,$rgb(222,33,71)⚠️)
+
+            $set_global(status_OK,✔️)
+
+        // FRONT COVER globals
         $set_global(size,[%cover_utils_front_size%])
         $set_global(bytes,[%cover_utils_front_bytes%])
         $set_global(format,[%cover_utils_front_format%])
@@ -378,15 +432,15 @@
         )
         )
         $ifgreater([%cover_utils_front_bytes%],300000,
-        | $rgb(222,33,71)[%cover_utils_front_size%]
+        ' | '$rgb(222,33,71)[%cover_utils_front_size%]
         $rgb(),
         $if($and($greater([%cover_utils_front_bytes%],200000),
         $greater($max([%cover_utils_front_height%],[%cover_utils_front_width%]),600)
         ),
-        | $rgb(249,213,6)[%cover_utils_front_size%]
+        ' | '$rgb(249,213,6)[%cover_utils_front_size%]
         $rgb(),
         $if([%cover_utils_front_size%],
-        | [%cover_utils_front_size%]
+        ' | '[%cover_utils_front_size%]
         )
         )
         )
@@ -697,7 +751,7 @@
         )
                     
     // ARTIST COLUMN check
-        // color titles with "feat" and more than one "&"
+        // color artists with "feat" and more than one "&" as well as artists where album artist is not first in list
 
         $if($strchr([%artist%],&),
             $ifequal($strchr([%artist%],&),$strrchr([%artist%],&),
@@ -716,6 +770,26 @@
             $puts(kill,1),
         )
 
+        $ifgreater($strstr(%artist%,%album artist%),1,
+        $puts(warning,1),
+        )
+
+        $ifgreater($strstr(%artist%,%album artist%),1,
+        $puts(warning,1),
+        // if full string not present, test individual values (does not work perfectly...)
+        $ifgreater($strstr(%artist%,$meta(album artist,0)),1,
+        $puts(warning,1),
+        $ifgreater($strstr(%artist%,$meta(album artist,1)),1,
+        $puts(warning,1),
+        $ifgreater($strstr(%artist%,$meta(album artist,2)),1,
+        $puts(warning,1),
+        $ifgreater($strstr(%artist%,$meta(album artist,3)),1,
+        $puts(warning,1),
+        )
+        )
+        )
+        )
+        )
 
         $if($get(kill),
             $rgb(222,33,71)[%artist%],
@@ -920,15 +994,15 @@
         )
 
         $ifgreater($get(bytes),300000,
-        | $rgb(222,33,71)$get(size)
+        ' | '$rgb(222,33,71)$get(size)
         $rgb(),
         $if($and($greater($get(bytes),200000),
         $greater($max($get(height),$get(width)),600)
         ),
-        | $rgb(249,213,6)$get(size)
+        ' | '$rgb(249,213,6)$get(size)
         $rgb(),
         $if($get(size),
-        | $get(size)
+        ' | '$get(size)
         )
         )
         )
@@ -1102,9 +1176,15 @@
                 $puts(kill,$add($get(kill),1))
             )
 
-        // ReplayGain CHECK
+        // ReplayGain / BPM CHECK
 
             $puts(status,$if([%replaygain_track_gain%],OK))
+            $if($get(status)=OK,
+            ,
+            $puts(kill,$add($get(kill),1))
+            )
+
+            $puts(status,$if([%bpm%],OK))
             $if($get(status)=OK,
             ,
             $puts(kill,$add($get(kill),1))
@@ -1285,8 +1365,8 @@
         // EXECUTE
 
             $ifgreater($get(kill),0,
-            $rgb(222,33,71)$get(kill) CHECK'('S')' KO,
-            $rgb(0,166,0)OK
+            $get_global(status_KO_color)$get(kill)$get_global(status_KO),
+            $get_global(status_OK)
             )
 
             $rgb()
