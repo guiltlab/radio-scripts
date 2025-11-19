@@ -918,6 +918,9 @@ $insert(%album artist%,%artist%,0))
             $puts(path_string_color,$rgb(50,130,180))
         )
 
+        $if($strstr(%path%,\Radio\backup\),
+        $puts(path_string,Bckp-Src)
+        )
         $if($strstr(%path%,\M-tags\ssd\),
         $puts(path_string,SSD-MTAG)
         )

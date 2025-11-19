@@ -434,7 +434,7 @@ function processFiles() {
         { name: "ReplayGain/Scan per-file track gain", delay: 1000 + items.Count * 500 }, // slowish with upsampling true peak scan < 150ms/track  
         { name: "Utilities/Verify integrity", delay: 500 }, // short delay because it should(?) not block files with RG scan (block happens during bpm scan)
         { name: "BPM Analyser/Automatically analyse BPMs", delay: 2000 + items.Count * 2000 }, // very slow with good sample length > 4s/track
-        { name: "Tagging/Scripts/Process tags for Radio Import", delay: 1000 + items.Count * 5000 },
+        { name: "Tagging/Scripts/Process tags for Radio Import (beta)", delay: 1000 + items.Count * 5000 },
         //{ name: "Tagging/Scripts/Processed", delay: 1000 + items.Count * 50 }, // short delay because tagging scripts are very fast
         { name: "propertiesCleanUp()", delay: 1000 + items.Count * 50 } // short delay because tagging scripts are very fast
     ];
