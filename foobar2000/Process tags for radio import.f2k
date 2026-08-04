@@ -49,6 +49,51 @@
                     ),
                     [%genre%]
                 )
+        // METAL: add if missing
+            // one-liner
+                $ifgreater($add($stricmp($meta(genre,0),metal),$stricmp($meta(genre,1),metal),$stricmp($meta(genre,2),metal),$stricmp($meta(genre,3),metal),$stricmp($meta(genre,4),metal),$stricmp($meta(genre,5),metal),$stricmp($meta(genre,6),metal),$stricmp($meta(genre,7),metal),$stricmp($meta(genre,8),metal),$stricmp($meta(genre,9),metal),$stricmp($meta(genre,10),metal),$stricmp($meta(genre,11),metal),$stricmp($meta(genre,12),metal),$stricmp($meta(genre,13),metal),$stricmp($meta(genre,14),metal),$stricmp($meta(genre,15),metal)),0,[%genre%],$if($or($strstr($lower(%genre%),speed metal),$strstr($lower(%genre%),nu metal),$strstr($lower(%genre%),thrash metal),$strstr($lower(%genre%),progressive metal),$strstr($lower(%genre%),power metal),$strstr($lower(%genre%),symphonic metal),$strstr($lower(%genre%),doom metal),$strstr($lower(%genre%),heavy metal),$strstr($lower(%genre%),sludge metal),$strstr($lower(%genre%),alternative metal),$strstr($lower(%genre%),black metal),$strstr($lower(%genre%),stoner metal),$strstr($lower(%genre%),death metal)),[%genre%]; Metal,[%genre%]))      
+            // main code
+                $ifgreater($add(
+                        $stricmp($meta(genre,0),metal),
+                        $stricmp($meta(genre,1),metal),
+                        $stricmp($meta(genre,2),metal),
+                        $stricmp($meta(genre,3),metal),
+                        $stricmp($meta(genre,4),metal),
+                        $stricmp($meta(genre,5),metal),
+                        $stricmp($meta(genre,6),metal),
+                        $stricmp($meta(genre,7),metal),
+                        $stricmp($meta(genre,8),metal),
+                        $stricmp($meta(genre,9),metal),
+                        $stricmp($meta(genre,10),metal),
+                        $stricmp($meta(genre,11),metal),
+                        $stricmp($meta(genre,12),metal),
+                        $stricmp($meta(genre,13),metal),
+                        $stricmp($meta(genre,14),metal),
+                        $stricmp($meta(genre,15),metal)
+                    ),
+                    0,
+                    [%genre%],
+                    $if(
+                        $or(
+                            $strstr($lower(%genre%),speed metal),
+                            $strstr($lower(%genre%),nu metal),
+                            $strstr($lower(%genre%),thrash metal),
+                            $strstr($lower(%genre%),progressive metal),
+                            $strstr($lower(%genre%),power metal),
+                            $strstr($lower(%genre%),symphonic metal),
+                            $strstr($lower(%genre%),doom metal),
+                            $strstr($lower(%genre%),heavy metal),
+                            $strstr($lower(%genre%),sludge metal),
+                            $strstr($lower(%genre%),alternative metal),
+                            $strstr($lower(%genre%),black metal),
+                            $strstr($lower(%genre%),stoner metal),
+                            $strstr($lower(%genre%),death metal)
+                        ),
+                        [%genre%]; Metal,
+                        [%genre%]
+                    )
+                )            
+
         // JAZZ: add if missing
             // one-liner
                 $ifgreater($add($stricmp($meta(genre,0),jazz),$stricmp($meta(genre,1),jazz),$stricmp($meta(genre,2),jazz),$stricmp($meta(genre,3),jazz),$stricmp($meta(genre,4),jazz),$stricmp($meta(genre,5),jazz),$stricmp($meta(genre,6),jazz),$stricmp($meta(genre,7),jazz),$stricmp($meta(genre,8),jazz),$stricmp($meta(genre,9),jazz),$stricmp($meta(genre,10),jazz),$stricmp($meta(genre,11),jazz),$stricmp($meta(genre,12),jazz),$stricmp($meta(genre,13),jazz),$stricmp($meta(genre,14),jazz),$stricmp($meta(genre,15),jazz)),0,[%genre%],$if($or($strstr($lower(%genre%),contemporary jazz),$strstr($lower(%genre%),spiritual jazz),$strstr($lower(%genre%),nu jazz),$strstr($lower(%genre%),electro jazz),$strstr($lower(%genre%),afro jazz),$strstr($lower(%genre%),hard bop),$strstr($lower(%genre%),bebop),$strstr($lower(%genre%),post bop),$strstr($lower(%genre%),free jazz),$strstr($lower(%genre%),japanese jazz),$strstr($lower(%genre%),gypsy jazz),$strstr($lower(%genre%),jazz manouche),$strstr($lower(%genre%),jazz fusion),$strstr($lower(%genre%),afro cuban jazz),$strstr($lower(%genre%),south african jazz),$strstr($lower(%genre%),latin jazz)),[%genre%]; Jazz,[%genre%]))
@@ -375,19 +420,38 @@ $insert(%album artist%,%artist%,0))
 
 
 // Columns UI GROUPING script
-    // highlight missing album artist
-    $if($or(
-            $and(
-                $stricmp($meta(album artist), %artist%),
-                $strchr(%artist%,&)
-            ),
-            $not($meta(album artist))
-        ),$puts(kill,1)
-    )
-    $if($get(kill),$put(color,$rgb(222,33,71)))
-    $if2(%album artist%,<no artist>)
-    $rgb()
-    [ / %album%][ '('%date%')']
+    // highlight missing album artist v1
+        $if($or(
+                $and(
+                    $stricmp($meta(album artist), %artist%),
+                    $strchr(%artist%,&)
+                ),
+                $not($meta(album artist))
+            ),$puts(kill,1)
+        )
+        $if($get(kill),$put(color,$rgb(222,33,71)))
+        $if2(%album artist%,<no artist>)
+        $rgb()
+        [ / %album%][ '('%date%')']
+
+    // highlight missing album artist and replace with directory name
+        // extract artist from folder name
+        $puts(extractedArtist,$substr(%directoryname%,0,$strchr(%directoryname%,'-')))
+        $puts(extractedArtist,$trim($cut($get(extractedArtist),$sub($len($get(extractedArtist)),1))))
+
+        //use folder name if no album artist is set
+        $if2($meta(album artist),$if($or(
+            $strstr(%directoryname%,'VA '),
+            $strstr($lower(%directoryname%),various),
+            $strstr($lower(%directoryname%),compilation)
+            ),$rgb(222,33,71)Various Artists,$rgb(222,33,71)$get(extractedArtist)
+            )
+        )
+
+        $rgb()
+
+        // album, edition, date
+        [ / %album%][ '('%edition%[ - %releasedate%]')'][ '('%date%')']
 
 // Columns UI Display scripts (COLUMNS CHECK)
     // GLOBALS: these variables are reused across other columns/script sections
