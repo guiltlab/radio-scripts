@@ -1,7 +1,7 @@
 // ==PREPROCESSOR==
 // @name "Playback Statistics Import Tool"
 // @author "gadgetogogo + Claude"
-// @version "1.4"
+// @version "1.6"
 // ==/PREPROCESSOR==
 
 // ================================================================================
@@ -9,14 +9,14 @@
 //  Requires: foo_playcount v3.1.9+
 //
 //  BUTTONS
-//  ┌───────────────────────────────────────────────────────┐
-//  │  Transfer Statistics (opens TextBox to set values)    │
-//  ├───────────────────────────────────────────────────────┤
-//  │  +1 Play Count (Mark as Played)                       │
-//  ├───────────────────────────────────────────────────────┤
-//  │  Regenerate GC Tracks  [♻/+]  [↺]  [🗁]              │
-//  ├──────────────────────────────────────────── [?]  [⚙] ─┤
-//  │  [toggle]  All-tracks / Per-track mode                │
+//  ┌──────────────────────────────────────────────────────┐
+//  │  Transfer Statistics (opens TextBox to set values)   │
+//  ├──────────────────────────────────────────────────────┤
+//  │  +1 Play Count (Mark as Played)                      │
+//  ├──────────────────────────────────────────────────────┤
+//  │  Regenerate GC Tracks  [♻/+]  [↺]  [🗁]            │
+//  ├─────────────────────────────────────────── [?]  [⚙]─┤
+//  │  [toggle]  All-tracks / Per-track mode               │
 //  └══════════════════════════════════════════════════════╛ ← status strip
 //
 //  GENERATE GARBAGE TRACKS
@@ -24,12 +24,10 @@
 //  randomised title/artist/album tags so foobar treats them as unique tracks,
 //  then appends them to the "Garbage collector" playlist.
 //  No external tools required.  The template file itself is never modified.
-//  GC tracks can be reused indefinitely in most cases, but some limitations remain
-//  which require regenerating GC tracks or resetting their playback statistics,
-//  the script should warn you and block operations when it happens.
-//  For instance, if you change the playback stats of an unrated track by using
-//  a GC track that has a stored %rating% value, the %rating% would get 
-//  transferred instead of staying unrated.
+//
+//      Some import operations cannot be done properly without first resetting
+//      the playback statistics of GC tracks. The script will warn you in such cases.
+//      You can automate the reset of GC tracks after every run by setting AUTO_RESET to true.
 //
 //  Clean-before-generate toggle (default ON): before generating, all gc_XXXXXX.*
 //  files are deleted from the gc folder and the playlist is cleared.
@@ -77,6 +75,7 @@ var g_gc_clean         = window.GetProperty("gc_clean",          true);
 var g_gc_auto_regen    = window.GetProperty("gc_auto_regen",    false);
 var g_warn_added_reset = window.GetProperty("warn_added_reset",  true);
 var g_mark_natural     = window.GetProperty("mark_natural",     false);
+var g_auto_reset       = window.GetProperty("auto_reset",       false);
 var g_per_track        = window.GetProperty("per_track_mode",   false);
 var g_compact          = window.GetProperty("compact_mode",     false);
 
@@ -98,6 +97,9 @@ var C = {
     btn3_idle   : RGB( 55,  40,  18),
     btn3_hover  : RGB( 88,  62,  24),
     btn3_border : RGB(150, 100,  40),
+    btn4_idle   : RGB( 28,  45,  70),
+    btn4_hover  : RGB( 40,  65, 105),
+    btn4_border : RGB( 60, 110, 185),
     icon_idle   : RGB( 30,  32,  42),
     icon_hover  : RGB( 52,  56,  72),
     icon_border : RGB( 62,  67,  85),
@@ -129,23 +131,26 @@ var PAD        = 6;
 var BAR_H      = 5;
 var BTN2_H     = 22;
 var BTN3_H     = 22;
+var BTN4_H     = 22;
 var TOG_H      = 20;
 var ICON_BTN_W = 22;
 var ROW_GAP    = 4;
 
-var _BELOW = ROW_GAP + BTN2_H + ROW_GAP + BTN3_H + ROW_GAP + TOG_H + ROW_GAP + BAR_H;
+var _BELOW = ROW_GAP + BTN2_H + ROW_GAP + BTN4_H + ROW_GAP + BTN3_H + ROW_GAP + TOG_H + ROW_GAP + BAR_H;
 
 // Compact mode constants
 var CROW_H   = 26;   // height of the single compact row
 var CMORE_W  = 30;   // width of the "..." button
 var CPLAY_W  = 40;   // width of the "+1" button
-var CIMPORT_W = 40;  // width of the import button
+var CIMPORT_W = 40;  // width of the import button (same as +1)
 
 // Menu item definitions for compact mode "..." dropdown.
 // type: "item" | "sep"  action: function  stateLabel: function→string (optional)
 // Used with window.CreatePopupMenu() for a native OS floating context menu.
 function _menuItems() {
     return [
+        { type:"item", label:"Fix %added% Date",
+          action: function(){ RunFixAdded(); } },
         { type:"item", label:"Regenerate GC Tracks",
           action: function(){ RunGenerateGC(); } },
         { type:"item",
@@ -175,6 +180,7 @@ var g_status      = "idle";
 var g_btn_hover   = false;
 var g_btn2_hover  = false;
 var g_btn3_hover  = false;
+var g_btn4_hover  = false;
 var g_clean_hover = false;
 var g_reset_hover = false;
 var g_openfld_hover = false;
@@ -200,8 +206,12 @@ function _btn2Rect() {
 // BTN3 row: main button + 3 icon buttons (clean-toggle, reset, open-folder)
 // The 3 icons sit flush right on the same row, each ICON_BTN_W wide.
 var BTN3_ICONS = 3;   // number of icon buttons on btn3 row
-function _btn3Rect() {
+function _btn4Rect() {
     var b = _btn2Rect();
+    return { x: PAD, y: b.y + b.h + ROW_GAP, w: window.Width - PAD * 2, h: BTN4_H };
+}
+function _btn3Rect() {
+    var b = _btn4Rect();
     var icons_w = ICON_BTN_W * BTN3_ICONS + ROW_GAP * (BTN3_ICONS - 1);
     return { x: PAD, y: b.y + b.h + ROW_GAP,
              w: window.Width - PAD * 2 - icons_w - ROW_GAP, h: BTN3_H };
@@ -568,6 +578,11 @@ function _runChain(gc_sub, tgt, tag_arr, n) {
                 _stripGCTags(gc_sub, n);
                 gc_sub.Dispose();
                 g_busy = false; g_status = "ok"; window.Repaint();
+                // Auto-reset: fire AFTER paste completes and busy is cleared,
+                // so the Reset confirmation dialog does not overlap the paste dialog.
+                if (g_auto_reset) {
+                    window.SetTimeout(function () { RunResetGC(); }, 200);
+                }
             }, T_BEFORE_PASTE);
         }, T_AFTER_IMPORT);
     }, T_AFTER_TAG_WRITE);
@@ -624,7 +639,10 @@ function showSettings() {
         + "#                  FIRST/LAST_PLAYED is earlier than the imported ADDED date.\n"
         + "# MARK_NATURAL     : true = stagger last_played in Mark as Played (track1=now,\n"
         + "#                  track2=now+dur(1), etc. May land slightly in the future.\n"
-        + "# COMPACT_MODE     : true = single-row compact layout (import + +1 + ... menu)\n\n"
+        + "# COMPACT_MODE     : true = single-row compact layout (import + +1 + ... menu)\n"
+        + "# AUTO_RESET       : true = automatically reset GC track playback stats after\n"
+        + "#                  every transfer/mark-as-played operation (fires after paste,\n"
+        + "#                  so only one dialog at a time). Default: false.\n\n"
         + "GC_FOLDER        = " + g_gc_folder   + "\n"
         + "GC_COUNT         = " + g_gc_count    + "\n"
         + "GC_TEMPLATE      = " + g_gc_template + "\n"
@@ -632,7 +650,8 @@ function showSettings() {
         + "GC_AUTO_REGEN    = " + (g_gc_auto_regen ? "true" : "false") + "\n"
         + "WARN_ADDED_RESET = " + (g_warn_added_reset ? "true" : "false") + "\n"
         + "MARK_NATURAL     = " + (g_mark_natural ? "true" : "false") + "\n"
-        + "COMPACT_MODE     = " + (g_compact ? "true" : "false");
+        + "COMPACT_MODE     = " + (g_compact ? "true" : "false") + "\n"
+        + "AUTO_RESET       = " + (g_auto_reset ? "true" : "false");
     var raw;
     try {
         raw = utils.TextBox(
@@ -677,6 +696,10 @@ function showSettings() {
             case "COMPACT_MODE":
                 g_compact = (val.toLowerCase() === "true");
                 window.SetProperty("compact_mode", g_compact);
+                break;
+            case "AUTO_RESET":
+                g_auto_reset = (val.toLowerCase() === "true");
+                window.SetProperty("auto_reset", g_auto_reset);
                 break;
         }
     }
@@ -1088,6 +1111,103 @@ function _RunMarkAsPlayed() {
 
 
 
+// ════════════════════════════════════════════════════════════════════════════
+//  BUTTON 4 – FIX %added% DATE
+//  Takes the %added% timestamp of the first selected track and applies it
+//  to all selected tracks, so an album has a uniform "added" date.
+//  Always operates in all-tracks mode (one date applied to every selection).
+// ════════════════════════════════════════════════════════════════════════════
+
+function RunFixAdded() {
+    if (g_busy) return;
+    var s = _setupTransfer("Fix %added% Date");
+    if (!s) return;
+    var tgt = s.tgt, gc_sub = s.gc_sub, tgt_stats = s.tgt_stats, n = s.n;
+
+    // Determine the ADDED timestamp to apply: use first selected track's value.
+    var add_ts = tgt_stats[0].added;
+    var add_d;
+
+    if (add_ts > 0) {
+        add_d = new Date(add_ts * 1000);
+    } else {
+        // First track has no %added% — prompt user, pre-filled with current time.
+        var now_str = tsToParisStr(Math.floor(Date.now() / 1000));
+        var raw;
+        try {
+            raw = utils.InputBox(
+                "The first selected track has no %added% timestamp.\n"
+                + "Enter the date to apply to all " + n + " selected track(s):\n"
+                + "(Paris local time, format: YYYY-MM-DD HH:MM:SS)",
+                "Fix %added% Date",
+                now_str, true);
+        } catch (e) {
+            gc_sub.Dispose(); tgt.Dispose(); return;
+        }
+        try {
+            add_d = parseParisDate(raw.trim());
+            if (!add_d) throw new Error("Empty date.");
+        } catch (e) {
+            gc_sub.Dispose(); tgt.Dispose();
+            utils.ShowPopupMessage("Invalid date: " + e.message, "Fix %added% Date");
+            return;
+        }
+    }
+
+    var add_filetime = dateToFiletime(add_d);
+    var tag_arr = [];
+    var resolved = [];
+    for (var j = 0; j < n; j++) {
+        var sts = tgt_stats[j];
+        // Only write ADDED_TIMESTAMP; preserve everything else by also
+        // writing the target's existing play stats so the paste does not
+        // overwrite them with whatever the GC track currently holds.
+        var t = {};
+        t["ADDED_TIMESTAMP"]        = [add_filetime];
+        t["PLAY_COUNT"]             = [String(sts.play_count)];
+        if (sts.rating >= 0)        t["RATING"]                 = [String(sts.rating)];
+        if (sts.first_played > 0)   t["FIRST_PLAYED_TIMESTAMP"] = [dateToFiletime(new Date(sts.first_played * 1000))];
+        if (sts.last_played > 0)    t["LAST_PLAYED_TIMESTAMP"]  = [dateToFiletime(new Date(sts.last_played * 1000))];
+        tag_arr.push(t);
+        resolved.push({
+            rating_unset : (sts.rating < 0),
+            added_ts     : Math.floor(add_d.getTime() / 1000),
+            fp_ts        : sts.first_played,
+            lp_ts        : sts.last_played
+        });
+    }
+
+    var cw = checkGCContamination(gc_sub, resolved, n);
+    if (cw.length > 0) {
+        gc_sub.Dispose(); tgt.Dispose();
+        utils.ShowPopupMessage(
+            "The following GC tracks have leftover foo_playcount values that\n"
+            + "would be incorrectly applied to target tracks:\n\n"
+            + cw.join("\n") + "\n\n"
+            + "Select all tracks in \u201c" + GARBAGE_PLAYLIST + "\u201d and run\n"
+            + "Playback Statistics \u2192 Reset statistics, then try again.\n"
+            + "(Or use the \u21ba button next to the Regenerate button.)",
+            "Fix %added% Date \u2013 GC Contamination");
+        return;
+    }
+
+    if (g_warn_added_reset) {
+        var aw = checkAddedResetWarnings(resolved, n);
+        if (aw.length > 0) {
+            utils.ShowPopupMessage(
+                "foo_playcount will automatically adjust %added% on the following track(s)\n"
+                + "because the imported ADDED date is more recent than FIRST/LAST_PLAYED:\n\n"
+                + aw.join("\n") + "\n\n"
+                + "This is intentional behaviour in foo_playcount v3.1.9+.\n"
+                + "The import will proceed.  Disable this warning via WARN_ADDED_RESET=false in \u2699 Settings.",
+                "Fix %added% Date \u2013 %added% Auto-Reset Notice");
+        }
+    }
+
+    _runChain(gc_sub, tgt, tag_arr, n);
+}
+
+
 // ── Reset GC playlist statistics ─────────────────────────────────────────────
 
 function RunResetGC() {
@@ -1150,7 +1270,7 @@ function on_paint(gr) {
 }
 
 function _paintNormal(gr, W, H) {
-    var br  = _btnRect(), br2 = _btn2Rect(), br3 = _btn3Rect();
+    var br  = _btnRect(), br2 = _btn2Rect(), br4 = _btn4Rect(), br3 = _btn3Rect();
     var clr = _cleanRect(), rsr = _resetRect(), ofr = _openfldRect();
     var tr  = _togRect(), hr  = _helpRect(),  cr  = _cogRect();
 
@@ -1169,6 +1289,14 @@ function _paintNormal(gr, W, H) {
     gr.WriteText(g_busy ? "" : "+1 Play Count (Mark as Played)",
         FONT_SM, g_busy ? C.text_busy : C.text2,
         br2.x + 8, br2.y, br2.w - 16, br2.h, 2, 2, 1, 0);
+
+    // Button 4 – Fix %added% Date
+    var b4f = g_busy ? C.btn_busy : (g_btn4_hover ? C.btn4_hover : C.btn4_idle);
+    gr.FillRectangle(br4.x, br4.y, br4.w, br4.h, b4f);
+    gr.DrawRectangle(br4.x, br4.y, br4.w, br4.h, 1, C.btn4_border);
+    gr.WriteText(g_busy ? "" : "Fix %added% Date  (uniform album date)",
+        FONT_SM, g_busy ? C.text_busy : C.text,
+        br4.x + 8, br4.y, br4.w - 16, br4.h, 2, 2, 1, 0);
 
     // Button 3 – Regenerate GC Tracks
     var b3f = g_busy ? C.btn_busy : (g_btn3_hover ? C.btn3_hover : C.btn3_idle);
@@ -1241,6 +1369,7 @@ function on_mouse_move(x, y) {
     if (g_compact) { _mouseMoveCompact(x, y); return; }
     var bh   = !g_busy && _inRect(_btnRect(),    x, y);
     var bh2  = !g_busy && _inRect(_btn2Rect(),   x, y);
+    var bh4  = !g_busy && _inRect(_btn4Rect(),   x, y);
     var bh3  = !g_busy && _inRect(_btn3Rect(),   x, y);
     var clh  = !g_busy && _inRect(_cleanRect(),  x, y);
     var rsh  = !g_busy && _inRect(_resetRect(),  x, y);
@@ -1248,10 +1377,11 @@ function on_mouse_move(x, y) {
     var th   = !g_busy && _inRect(_togRect(),    x, y);
     var hh   = !g_busy && _inRect(_helpRect(),   x, y);
     var ch   = !g_busy && _inRect(_cogRect(),    x, y);
-    if (bh  !== g_btn_hover   || bh2 !== g_btn2_hover || bh3 !== g_btn3_hover
-     || clh !== g_clean_hover || rsh !== g_reset_hover || ofh !== g_openfld_hover
-     || th  !== g_tog_hover   || hh  !== g_help_hover  || ch  !== g_cog_hover) {
-        g_btn_hover = bh; g_btn2_hover = bh2; g_btn3_hover = bh3;
+    if (bh  !== g_btn_hover   || bh2 !== g_btn2_hover || bh4 !== g_btn4_hover
+     || bh3 !== g_btn3_hover   || clh !== g_clean_hover || rsh !== g_reset_hover
+     || ofh !== g_openfld_hover || th  !== g_tog_hover  || hh  !== g_help_hover
+     || ch  !== g_cog_hover) {
+        g_btn_hover = bh; g_btn2_hover = bh2; g_btn4_hover = bh4; g_btn3_hover = bh3;
         g_clean_hover = clh; g_reset_hover = rsh; g_openfld_hover = ofh;
         g_tog_hover = th; g_help_hover = hh; g_cog_hover = ch;
         window.Repaint();
@@ -1287,7 +1417,7 @@ function _mouseMoveCompact(x, y) {
 }
 
 function on_mouse_leave() {
-    g_btn_hover = false; g_btn2_hover = false; g_btn3_hover = false;
+    g_btn_hover = false; g_btn2_hover = false; g_btn4_hover = false; g_btn3_hover = false;
     g_clean_hover = false; g_reset_hover = false; g_openfld_hover = false;
     g_tog_hover = false; g_help_hover = false; g_cog_hover = false;
     window.Repaint();
@@ -1299,6 +1429,7 @@ function on_mouse_lbtn_up(x, y) {
     if (g_compact) { _lbtnUpCompact(x, y); return; }
     if      (_inRect(_btnRect(),     x, y)) RunTransfer();
     else if (_inRect(_btn2Rect(),    x, y)) RunMarkAsPlayed();
+    else if (_inRect(_btn4Rect(),    x, y)) RunFixAdded();
     else if (_inRect(_btn3Rect(),    x, y)) RunGenerateGC();
     else if (_inRect(_cleanRect(),   x, y)) {
         g_gc_clean = !g_gc_clean;
